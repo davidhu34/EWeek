@@ -11,9 +11,40 @@ import ActionDelete from 'material-ui/svg-icons/action/delete'
 import NavigationArrowUpward from 'material-ui/svg-icons/navigation/arrow-upward'
 import NavigationArrowDownward from 'material-ui/svg-icons/navigation/arrow-downward'
 
-const Instruction = ({ index, instruction, status }) => {
-    const { name, type } = instruction
-    return <Card>
+const orderButtons = [
+    <FlatButton label="move" disabled={true}/>,
+    <IconButton tooltip="upward">
+        <NavigationArrowUpward/>
+    </IconButton>,
+    <IconButton tooltip="downward">
+        <NavigationArrowDownward/>
+    </IconButton>
+]
+const editButtons =  [
+    <FlatButton label="save" icon={<EditorModeEdit/>}/>,
+    <FlatButton label="cancel"/>
+]
+const viewButtons = [
+    <FlatButton label="edit" icon={<EditorModeEdit/>}/>,
+    <FlatButton label=""delete icon={<ActionDelete/>}/>
+]
+
+const Instruction = ({ index, instruction,
+    isEditor, viewing, editing
+}) => {
+    const { name, type, content } = instruction
+    const actionButtons = isEditor && viewing? 
+        <CardActions expandable={true}>
+        {[
+            ...(editing? editButtons: viewButtons),
+            ...orderButtons
+        ]}
+        </CardActions>
+        : null
+    return <Card initiallyExpanded={viewing}
+        onExpandChange={ (willExpand) => {
+          if(willExpand) {}//change view
+        }}>
         <CardHeader
             title={String(index)+". "+name}
             subtitle={type}
@@ -21,25 +52,12 @@ const Instruction = ({ index, instruction, status }) => {
             showExpandableButton={true}
         />
         <CardText expandable={true}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-            Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-            Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
+            {content}
         </CardText>
-        <CardActions expandable={true}>
-            <FlatButton icon={<EditorModeEdit/>}/>
-            <FlatButton icon={<ActionDelete/>}/>
-            <FlatButton label="move" disabled={true}/>
-            <IconButton tooltip="upward">
-                <NavigationArrowUpward/>
-            </IconButton>
-            <IconButton tooltip="downward">
-                <NavigationArrowDownward/>
-            </IconButton>
-        </CardActions>
+        {actionButtons}
     </Card>
 }
 
 export default Instruction/*connect(
     state => ({})
-)(ListItem)*/
+)(Instruction)*/

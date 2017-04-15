@@ -11,40 +11,20 @@ import ActionDelete from 'material-ui/svg-icons/action/delete'
 import NavigationArrowUpward from 'material-ui/svg-icons/navigation/arrow-upward'
 import NavigationArrowDownward from 'material-ui/svg-icons/navigation/arrow-downward'
 
-const orderButtons = [
-    <FlatButton label="move" disabled={true}/>,
-    <IconButton tooltip="upward">
-        <NavigationArrowUpward/>
-    </IconButton>,
-    <IconButton tooltip="downward">
-        <NavigationArrowDownward/>
-    </IconButton>
-]
-const editButtons =  [
-    <FlatButton label="save" icon={<EditorModeEdit/>}/>,
-    <FlatButton label="cancel"/>
-]
-const viewButtons = [
-    <FlatButton label="edit" icon={<EditorModeEdit/>}/>,
-    <FlatButton label=""delete icon={<ActionDelete/>}/>
-]
-
-const Instruction = ({ index, instruction,
-    isEditor, viewing, editing
-}) => {
+const Instruction = ({ index, instruction, isEditor }) => {
     const { name, type, content } = instruction
-    const actionButtons = isEditor && viewing? 
-        <CardActions expandable={true}>
-        {[
-            ...(editing? editButtons: viewButtons),
-            ...orderButtons
-        ]}
-        </CardActions>
-        : null
-    return <Card initiallyExpanded={viewing}
-        onExpandChange={ (willExpand) => {
-          if(willExpand) {}//change view
-        }}>
+    const actionButtons = isEditor? <CardActions expandable={true}>
+        <FlatButton label="edit" icon={<EditorModeEdit/>}/>
+        <FlatButton label="delete" icon={<ActionDelete/>}/>
+        <IconButton tooltip="upward">
+            <NavigationArrowUpward/>
+        </IconButton>
+        <IconButton tooltip="downward">
+            <NavigationArrowDownward/>
+        </IconButton>
+    </CardActions> : null
+
+    return <Card>
         <CardHeader
             title={String(index)+". "+name}
             subtitle={type}
@@ -58,6 +38,5 @@ const Instruction = ({ index, instruction,
     </Card>
 }
 
-export default Instruction/*connect(
-    state => ({})
-)(Instruction)*/
+export default Instruction
+//export default connect( state => ({}) )(Instruction)

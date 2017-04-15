@@ -4,21 +4,25 @@ import { connect } from 'react-redux'
 import FlatButton from 'material-ui/FlatButton'
 import Instruction from './Instruction'
 
-const Program = (props) => {
-    console.log(props)
-    const { user, owner, instructions } = props
+import { creationDialog, editDialog, deleteDialog, changeOrder } from './actions'
+
+const Program = ({ user, owner, instructions,
+    newIns, editIns, deleteIns, moveIns
+}) => {
     const insList = instructions.map( (i, idx) =>
         <Instruction key={idx}
             index={idx+1}
             instruction={i}
+            deleteIns={deleteIns(idx)}
+            editIns={editIns(idx)}
+            moveUp={moveIns(idx, true)}
+            moveDown={moveIns(idx, false)}
             isEditor={owner === user} />
     )
     return <div>
         {insList}
     </div>
 }
-
-
 
 export default connect(
     state => {
@@ -33,4 +37,12 @@ export default connect(
             )
         }
     },
+    dispatch => {
+        return {
+            newIns: () => (e) => dispatch(creationDialog),
+            editIns: (idx) => (e) => dispatch(editDialog(idx)),
+            deleteIns: (idx) => (e) => dispatch(deleteDialog(idx)),
+            moveIns: (idx, up) => (e) => dispatch(changeOrder(idx, up))
+        }
+    }
 )(Program)

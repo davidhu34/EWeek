@@ -11,11 +11,15 @@ import ActionDelete from 'material-ui/svg-icons/action/delete'
 import NavigationArrowUpward from 'material-ui/svg-icons/navigation/arrow-upward'
 import NavigationArrowDownward from 'material-ui/svg-icons/navigation/arrow-downward'
 
-const Instruction = ({ index, instruction, isEditor }) => {
+const Instruction = ({ index, instruction, isEditor,
+    deleteIns
+}) => {
     const { name, type, content } = instruction
     const actionButtons = isEditor? <CardActions expandable={true}>
         <FlatButton label="edit" icon={<EditorModeEdit/>}/>
-        <FlatButton label="delete" icon={<ActionDelete/>}/>
+        <FlatButton label="delete"
+            icon={<ActionDelete/>}
+            onClick={deleteIns}/>
         <IconButton tooltip="upward">
             <NavigationArrowUpward/>
         </IconButton>

@@ -4,7 +4,7 @@ import { Add } from './actions'
 
 import FlatButton from 'material-ui/FlatButton'
 import Program from './Program'
-
+import Modal from './Modal'
 const App = ({ data, Add }) => {
     const size = window.innerWidth + 'x' + window.innerHeight
     const screenSize = screen.width + 'x' + screen.height
@@ -15,6 +15,7 @@ const App = ({ data, Add }) => {
         </div>
         {size}<br/>{screenSize}
         <Program />
+        <Modal />
     </div>
 }
 

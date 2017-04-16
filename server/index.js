@@ -5,7 +5,7 @@ const path = require('path')
 const socketio = require('socket.io');
 const express = require('express');
 
-const { PORT } = require('./configs')
+const { PORT, MONGOURI } = require('./configs')
 const { normalizePort, onError, onListening } = require('./util')
 const applyMiddlewares = require('./middlewares')
 const api = require('./api')
@@ -27,7 +27,7 @@ app.get( '/', (req, res, next) => {
 const server = http.createServer( app )
 const io = new socketio(server)
 const models = mongo( MONGOURI )
-app.use( '/', api( io))//, models ) )
+app.use( '/', api(io, models ) )
 
 server.listen( port )
 server.on( 'error', onError( port ) )

@@ -12,7 +12,7 @@ const initUser = {
 
 export const user = (state=initUser, action) => {
 	switch (action.type) {
-		case 'SAVEING_CHANGES':
+		case 'SAVING_CHANGES':
 			return {
 				...state,
 				saving: true

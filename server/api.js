@@ -18,33 +18,10 @@ const classes = [
     'bbunit'
 ]
 let users = {}
-const user = socket => {
-    console.log(socket.id)
-    socket.on( 'LOGIN', login => {
-        console.log('data req', login)
-        const {Class, team, password} = login
-        const validClass = classes.indexOf(Class) > -1
-        const validPassword = password === Class+team
-        if (validClass && validPassword) {
-            socket.emit('LOGIN_SUCCESS', {
-                profile: {
-                    id: password,
-                    team: team,
-                    Class: Class
-                }
-            })
-        } else {
-            socket.emit('LOGIN_FAIL', {
-                Class: validClass,
-                password: validPassword
-            })
-        }
-    })
-    /*Program.find({id: '2'}, ( err, programs ) => {
-        console.log('found', err, programs)
-        io.emit( 'INIT_DATA', {})
-    }).then( successLog )*/
-}
+let classProgram = {}
+classes.map( c => {
+    classProgram[c] = {}
+})
 
 
 module.exports = ( io, models ) => {
@@ -56,6 +33,68 @@ module.exports = ( io, models ) => {
         res.send( 'yo' )
     })
 
+    const user = socket => {
+        console.log(socket.id)
+        socket.on( 'LOGIN', login => {
+            console.log('data req', login)
+            const {Class, team, password} = login
+            const validClass = classes.indexOf(Class) > -1
+            const validPassword = password === Class+team
+            if (validClass && validPassword) {
+                const profile = {
+                    id: password,
+                    team: team,
+                    Class: Class
+                }
+                users[socket.id] = profile
+                socket.emit('LOGIN_SUCCESS', {
+                    profile: profile
+                })
+                Program.findOne({id: password}, ( err, program ) => {
+                    console.log('found', err, program)
+                    classProgram[Class][team] = program
+                    if (!program) {
+                        const init = JSON.stringify({
+                            id: password,
+                            team: team,
+                            Class: Class,
+                            instructionOrder: [],
+                            instructions: {}
+                        })
+                        Program.create({
+                            id: password,
+                            data: init
+                        }, (err, p) => {
+                            console.log('created for '+password)
+                            socket.emit( 'PROGRAM_DATA', init)
+                        })
+                    } else socket.emit( 'PROGRAM_DATA', program)
+                }).then( successLog )
+            } else {
+                socket.emit('LOGIN_FAIL', {
+                    Class: validClass,
+                    password: validPassword
+                })
+            }
+        })
+        socket.on('SAVE_CHANGES', program => {
+            const u = users[socket.id]
+            classProgram[u.Class][u.team] = program
+            console.log('u', u, 'p', program)
+            Program.update( {id: u.id}, {
+                id: u.id,
+                data: JSON.stringify(program)
+            }, (err, n, res) => {
+                console.log('update cb:', err, n, res)
+                if (err) console.log('save fail')
+                else socket.emit('SAVE_SUCCESS', program)
+            })
+        })
+        socket.on('disconnect',() => {
+            delete users[socket.id]
+        })
+
+    }
 
     io.on('connection', socket => {
         user(socket)

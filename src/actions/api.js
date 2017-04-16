@@ -2,14 +2,6 @@ import io from 'socket.io-client'
 
 const socket = io('http://localhost:5000')
 
-const newMsg = msg => {
-    const payload = {
-        ...msg,
-        message: msg.message.replace('\n','')
-    }
-    console.log('emit', payload)
-    socket.emit('MESSAGE', payload)
-}
 const socketLogin = login => {
     console.log('emit LOGIN')
     socket.emit('LOGIN', {
@@ -17,6 +9,10 @@ const socketLogin = login => {
         team: login.team,
         password: login.password
     })
+}
+const emitChanges = p => {
+    console.log('emit SAVE_CHANGES')
+    socket.emit('SAVE_CHANGES', p)
 }
 
 const api = (dispatch) => {
@@ -48,9 +44,15 @@ const api = (dispatch) => {
     })
     socket.on( 'PROGRAM_DATA', data => {
         dispatch({
-            type: 'FETCH_PROGRAMS',
-            programs: JSON.parse(data)
+            type: 'FETCH_PROGRAM',
+            program: JSON.parse(data)
+        })
+    })
+    socket.on( 'SAVE_SUCCESS', data => {
+        console.log('SAVE_SUCCESS:', data)
+        dispatch({
+            type: 'SAVED_CHANGES',
         })
     })
 }
-export { api, socketLogin }
+export { api, socketLogin, emitChanges }

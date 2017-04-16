@@ -1,4 +1,4 @@
-import { socketLogin } from './api'
+import { socketLogin, emitChanges } from './api'
 
 export const Add = () => ({
     type: 'ADD'
@@ -98,7 +98,7 @@ export const reselectTeam = () => {
     }
 }
 export const saveChanges = (dispatch, getState) => {
-    dispatch({type:'SAVEING_CHANGES'})
+    dispatch({type:'SAVING_CHANGES'})
     const state = getState()
-    setTimeout(() => dispatch({type:'SAVED_CHANGES'}), 3000)
+    emitChanges(state.programs[state.user.profile.id])
 }

@@ -38,7 +38,7 @@ const App = ({ user, reselectTeam, saveChanges }) => {
             icon={<ActionFormatListNumbered />}
             disabled={user.viewing === null} />
         {(user.profile)?
-            (user.viewing === user.profile.team)?
+            (user.viewing === user.profile.id)?
                 <FlatButton label="Save Changes"
                     icon={<ContentSave />}
                     disabled={user.saving}

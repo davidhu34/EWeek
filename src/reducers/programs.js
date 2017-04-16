@@ -126,8 +126,11 @@ const program = (state, action) => {
 }
 export const programs = ( state={}, action ) => {
     switch (action.type) {
-        case 'FETCH_PROGRAMS':
-            return initPrograms
+        case 'FETCH_PROGRAM':
+            return {
+                ...state,
+                [action.program.id]: action.program
+            }
         case 'INS_CREATE':
         case 'INS_DELETE':
         case 'INS_EXPAND':

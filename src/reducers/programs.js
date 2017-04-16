@@ -14,7 +14,8 @@ const initPrograms = {
                     to: '',
                     times: ''
                 },
-                then: ''
+                then: '',
+                expansion: false
             },
             '2': {
                 id: '2',
@@ -26,7 +27,8 @@ const initPrograms = {
                     to: '1',
                     times: '2'
                 },
-                then: '3'
+                then: '3',
+                expansion: false
             },
             '3': {
                 id: '3',
@@ -38,7 +40,8 @@ const initPrograms = {
                     to: '',
                     times: ''
                 },
-                then: ''
+                then: '',
+                expansion: false
             }
         }
     }
@@ -46,6 +49,14 @@ const initPrograms = {
 
 const instructions = (state, action) => {
     switch (action.type) {
+        case 'INS_EXPAND':
+            return {
+                ...state,
+                [action.instruction.id]: {
+                    ...action.instruction,
+                    expansion: action.expansion
+                }
+            }
         case 'INS_UPDATE':
             return {
                 ...state,
@@ -57,6 +68,7 @@ const instructions = (state, action) => {
 }
 const program = (state, action) => {
     switch (action.type) {
+        case 'INS_EXPAND':
         case 'INS_UPDATE':
             return {
                 ...state,
@@ -66,21 +78,22 @@ const program = (state, action) => {
         case 'INS_CHANGE_ORDER':
             const order = state.instructionOrder
             const pos = action.upordown?
-                action.index : action.index+1
-            return {
+                action.index-1 : action.index
+            return pos > -1 && pos < order.length-1? {
                 ...state,
                 instructionOrder: [
                     ...order.slice(0, pos),
                     order[pos+1], order[pos],
                     ...order.slice(pos+2)
                 ]
-            }
+            }: state
         default:
             return state
     }
 }
 export const programs = ( state=initPrograms, action ) => {
     switch (action.type) {
+        case 'INS_EXPAND':
         case 'INS_UPDATE':
         case 'INS_CHANGE_ORDER':
             return {

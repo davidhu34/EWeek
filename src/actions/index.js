@@ -30,6 +30,13 @@ export const changeOrder = (p, idx, upordown) => {
     }
 }
 
+export const expand = (p, ins, e) => ({
+    type: 'INS_EXPAND',
+    program: p,
+    instruction: ins,
+    expansion: e
+})
+
 export const dialogAction = {
     'create': (p, ins) => ({
         type: 'INS_CREATE',

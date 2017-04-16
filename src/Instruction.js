@@ -12,9 +12,9 @@ import NavigationArrowUpward from 'material-ui/svg-icons/navigation/arrow-upward
 import NavigationArrowDownward from 'material-ui/svg-icons/navigation/arrow-downward'
 
 const Instruction = ({ index, instruction, isEditor,
-    editIns, deleteIns, moveUp, moveDown
+    editIns, deleteIns, moveUp, moveDown, expand
 }) => {
-    const { name, type, content, repeat, then } = instruction
+    const { name, type, content, repeat, then, expansion } = instruction
     const actionButtons = isEditor? <CardActions expandable={true}>
         <FlatButton label="edit"
             icon={<EditorModeEdit/>}
@@ -36,8 +36,8 @@ const Instruction = ({ index, instruction, isEditor,
         '#'+repeat.from: '#'+repeat.from+'~#'+repeat.to
     const repeatContent = 'repeat '+repeatSeq+' for '
         +repeat.times+' times. Then, go to #'+then
-        
-    return <Card>
+console.log(expansion)
+    return <Card expanded={expansion} onExpandChange={expand}>
         <CardHeader
             title={String(index)+'. '+name}
             subtitle={type}

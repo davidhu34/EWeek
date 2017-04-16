@@ -43,7 +43,8 @@ export const modal = ( state=initModal, action ) => {
                         to: '',
                         times: ''
                     },
-                    then: ''
+                    then: '',
+                    expansion: true
                 }
             }
         case 'UPDATE_TEMP':

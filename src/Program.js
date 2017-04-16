@@ -5,10 +5,10 @@ import FlatButton from 'material-ui/FlatButton'
 import Instruction from './Instruction'
 import ActionNoteAdd from 'material-ui/svg-icons/action/note-add'
 
-import { creationDialog, editDialog, deleteDialog, changeOrder } from './actions'
+import { creationDialog, editDialog, deleteDialog, changeOrder, expand } from './actions'
 
 const Program = ({ user, owner, program, newIndex, instructions,
-    newIns, editIns, deleteIns, moveIns
+    newIns, editIns, deleteIns, moveIns, expand
 }) => {
     console.log(instructions)
     const insList = instructions.map( (i, idx) =>
@@ -19,6 +19,7 @@ const Program = ({ user, owner, program, newIndex, instructions,
             editIns={editIns(idx, i)}
             moveUp={moveIns(program, idx, true)}
             moveDown={moveIns(program, idx, false)}
+            expand={expand(program, i)}
             isEditor={owner === user} />
     )
     if (owner === user) insList.push(
@@ -52,7 +53,8 @@ export default connect(
             newIns: (idx) => (e) => dispatch(creationDialog(idx)),
             editIns: (idx, i) => (e) => dispatch(editDialog(idx, i)),
             deleteIns: (idx) => (e) => dispatch(deleteDialog(idx)),
-            moveIns: (p, idx, up) => (e) => dispatch(changeOrder(p, idx, up))
+            moveIns: (p, idx, up) => (e) => dispatch(changeOrder(p, idx, up)),
+            expand: (p, ins) => (willExpand) => { dispatch(expand(p, ins, willExpand)) }
         }
     }
 )(Program)

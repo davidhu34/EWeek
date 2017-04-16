@@ -1,6 +1,10 @@
 const initModal = {
     open: false,
-    type: 'yo'
+    type: '',
+    title: '',
+    content: '',
+    idx: 0,
+    tempIns: {}
 }
 
 export const modal = ( state=initModal, action ) => {
@@ -8,12 +12,13 @@ export const modal = ( state=initModal, action ) => {
         case 'LAUNCH_DELETE_DIALOG':
             return {
                 open: true,
-                type: 'delete'
+                type: 'delete',
+                idx: action.index,
+                title: 'Delete #'+String(action.index+1),
+                content: 'Delete this instruction?'
             }
         case 'CLOSE_DIALOG':
-            return {
-                ...state, open: false
-            }
+            return initModal
         default:
             return state
     }

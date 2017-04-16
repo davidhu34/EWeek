@@ -3,10 +3,11 @@ import { connect } from 'react-redux'
 
 import FlatButton from 'material-ui/FlatButton'
 import Instruction from './Instruction'
+import ActionNoteAdd from 'material-ui/svg-icons/action/note-add'
 
 import { creationDialog, editDialog, deleteDialog, changeOrder } from './actions'
 
-const Program = ({ user, owner, instructions,
+const Program = ({ user, owner, program, instructions,
     newIns, editIns, deleteIns, moveIns
 }) => {
     const insList = instructions.map( (i, idx) =>
@@ -19,6 +20,12 @@ const Program = ({ user, owner, instructions,
             moveDown={moveIns(idx, false)}
             isEditor={owner === user} />
     )
+    if (owner === user) insList.push(
+        <FlatButton label="new"
+            fullWidth={true}
+            icon={<ActionNoteAdd />}
+            onClick={newIns()}/>
+    )
     return <div>
         {insList}
     </div>
@@ -27,13 +34,14 @@ const Program = ({ user, owner, instructions,
 export default connect(
     state => {
         console.log(state)
-        const { programs, instructions, view, user } = state
-        const program = programs['1']
+        const { programs, user } = state
+        const program = programs[user.viewing]
         return {
             user: user.team,
             owner: program.team,
-            instructions: program.instructionList.map(
-                id => instructions[id]
+            program: program.id,
+            instructions: program.instructionOrder.map(
+                id => program.instructions[id]
             )
         }
     },
@@ -42,7 +50,7 @@ export default connect(
             newIns: () => (e) => dispatch(creationDialog),
             editIns: (idx) => (e) => dispatch(editDialog(idx)),
             deleteIns: (idx) => (e) => dispatch(deleteDialog(idx)),
-            moveIns: (idx, up) => (e) => dispatch(changeOrder(idx, up))
+            moveIns: (p, idx, up) => (e) => dispatch(changeOrder(idx, up))
         }
     }
 )(Program)

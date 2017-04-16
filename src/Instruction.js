@@ -12,18 +12,22 @@ import NavigationArrowUpward from 'material-ui/svg-icons/navigation/arrow-upward
 import NavigationArrowDownward from 'material-ui/svg-icons/navigation/arrow-downward'
 
 const Instruction = ({ index, instruction, isEditor,
-    deleteIns
+    editIns, deleteIns, moveUp, moveDown
 }) => {
     const { name, type, content } = instruction
     const actionButtons = isEditor? <CardActions expandable={true}>
-        <FlatButton label="edit" icon={<EditorModeEdit/>}/>
+        <FlatButton label="edit"
+            icon={<EditorModeEdit/>}
+            onClick={editIns}/>/>
         <FlatButton label="delete"
             icon={<ActionDelete/>}
             onClick={deleteIns}/>
-        <IconButton tooltip="upward">
+        <IconButton tooltip="upward"
+            onClick={moveUp}>
             <NavigationArrowUpward/>
         </IconButton>
-        <IconButton tooltip="downward">
+        <IconButton tooltip="downward"
+            onClick={moveDown}>
             <NavigationArrowDownward/>
         </IconButton>
     </CardActions> : null

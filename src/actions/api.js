@@ -25,10 +25,9 @@ const api = (dispatch) => {
     })
     socket.on( 'LOGIN_FAIL', data => {
         console.log('LOGIN_FAIL:', data)
-        const classErr = data.Class? 'invalid Class':''
-        const pwdErr = data.password? 'wrong password': ''
-        const errMsg = data.password && data.Class?
-            classErr+' | '+pwdErr : classErr+pwdErr
+        const errMsg = data.Class? data.password? ''
+            :'wrong password':'invalid Class'
+        console.log(errMsg)
         dispatch({
             type: 'UPDATE_LOGIN',
             attribute: 'info',

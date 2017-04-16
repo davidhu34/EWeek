@@ -40,9 +40,10 @@ module.exports = ( io, models ) => {
             const {Class, team, password} = login
             const validClass = classes.indexOf(Class) > -1
             const validPassword = password === Class+team
+            const id = password
             if (validClass && validPassword) {
                 const profile = {
-                    id: password,
+                    id: id,
                     team: team,
                     Class: Class
                 }
@@ -50,25 +51,34 @@ module.exports = ( io, models ) => {
                 socket.emit('LOGIN_SUCCESS', {
                     profile: profile
                 })
-                Program.findOne({id: password}, ( err, program ) => {
+                Program.findOne({id: id}, ( err, program ) => {
                     console.log('found', err, program)
                     classProgram[Class][team] = program
                     if (!program) {
                         const init = JSON.stringify({
-                            id: password,
+                            id: id,
                             team: team,
                             Class: Class,
                             instructionOrder: [],
                             instructions: {}
                         })
                         Program.create({
-                            id: password,
+                            id: id,
                             data: init
                         }, (err, p) => {
-                            console.log('created for '+password)
+                            console.log('created for '+id)
                             socket.emit( 'PROGRAM_DATA', init)
                         })
-                    } else socket.emit( 'PROGRAM_DATA', program)
+                    } else socket.emit( 'PROGRAM_DATA', program.data)
+                    Object.keys(classProgram[Class]).map( k => {
+                        console.log('calss program key', k)
+                        if (k !== team) {
+                            console.log('send key', k)
+                            socket.emit('PROGRAM_DATA',
+                                classProgram[Class][k].data
+                            )
+                        }
+                    })
                 }).then( successLog )
             } else {
                 socket.emit('LOGIN_FAIL', {

@@ -16,11 +16,11 @@ const initPrograms = {
                 type: 'repeat',
                 content: 'Join me to the dark side twice',
                 repeat: {
-                    from: 1,
-                    to: 1,
-                    times: 2
+                    from: '1',
+                    to: '1',
+                    times: '2'
                 },
-                then: 3
+                then: '3'
             },
             '3': {
                 id: '3',

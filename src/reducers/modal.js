@@ -2,7 +2,7 @@ const initModal = {
     open: false,
     type: '',
     title: '',
-    content: '',
+    note: '',
     idx: 0,
     tempIns: null
 }
@@ -15,7 +15,7 @@ export const modal = ( state=initModal, action ) => {
                 type: 'delete',
                 idx: action.index,
                 title: 'Delete #'+String(action.index+1),
-                content: 'Delete this instruction?',
+                note: 'Delete this instruction?',
                 tempIns: null
             }
         case 'LAUNCH_EDIT_DIALOG':
@@ -24,7 +24,7 @@ export const modal = ( state=initModal, action ) => {
                 type: 'update',
                 idx: action.index,
                 title: 'Edit #'+String(action.index+1),
-                content: 'click UPDATE to save changes',
+                note: 'click UPDATE to save changes',
                 tempIns: action.instruction
             }
         case 'LAUNCH_CREATION_DIALOG':
@@ -33,16 +33,52 @@ export const modal = ( state=initModal, action ) => {
                 type: 'create',
                 idx: action.index,
                 title: 'Creating #'+String(action.index+1),
-                content: 'create new instruction',
-                tempIns: null
+                note: 'create new instruction',
+                tempIns: {
+                    name: '',
+                    type: '',
+                    content: '',
+                    repeat: {
+                        from: '',
+                        to: '',
+                        times: ''
+                    },
+                }
             }
         case 'UPDATE_TEMP':
-            return {
-                ...state,
-                tempIns: {
-                    ...state.tempIns,
-                    [action.attribute]: action.value
-                }
+            const attr = action.attribute
+            switch (attr) {
+                case 'type':
+                    return {
+                        ...state,
+                        tempIns: {
+                            ...state.tempIns,
+                            type: action.value === 1? 'do': 'repeat'
+                        }
+                    }
+                case 'from':
+                case 'to':
+                case 'times':
+                    return {
+                        ...state,
+                        tempIns: {
+                            ...state.tempIns,
+                            repeat: {
+                                ...state.tempIns.repeat,
+                                [action.attribute]: action.value
+                            }
+                        }
+                    }
+                case 'name':
+                case 'content':
+                default:
+                    return {
+                        ...state,
+                        tempIns: {
+                            ...state.tempIns,
+                            [action.attribute]: action.value
+                        }
+                    }
             }
         case 'CLOSE_DIALOG':
             return initModal

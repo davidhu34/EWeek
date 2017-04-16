@@ -1,7 +1,6 @@
-
 const initPrograms = {
-    '1': {
-        id: '1',
+    'A': {
+        id: 'A',
         team: 'A',
         instructionOrder: ['1', '2', '3'],
         instructions: {
@@ -125,8 +124,10 @@ const program = (state, action) => {
             return state
     }
 }
-export const programs = ( state=initPrograms, action ) => {
+export const programs = ( state={}, action ) => {
     switch (action.type) {
+        case 'FETCH_PROGRAMS':
+            return initPrograms
         case 'INS_CREATE':
         case 'INS_DELETE':
         case 'INS_EXPAND':

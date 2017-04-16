@@ -67,3 +67,51 @@ export const updateTemp = (attr, value) => {
         value: value
     }
 }
+export const updateLogin = (attr, value) => {
+    return {
+        type: 'UPDATE_LOGIN',
+        attribute: attr,
+        value: value
+    }
+}
+
+export const submitLogin = login => dispatch => {
+    console.log('thunk login')
+    const { Class, team, password } = login
+    if ( Class && team && password ) {
+        if(password === '123') {
+            dispatch({
+                type: 'LOGIN',
+                profile: {
+                    id: 1,
+                    ...login
+                }
+            })
+            dispatch({
+                type: 'FETCH_PROGRAMS',
+                programs: {}
+            })
+        } else {
+            dispatch(updateLogin('info', 'wrong password'))
+        }
+    } else {
+        dispatch(updateLogin('info', 'please comlpete form'))
+    }
+}
+
+export const selectProgram = program => {
+    return {
+        type: 'SELECT_PROGRAM',
+        program: program
+    }
+}
+export const reselectTeam = () => {
+    return {
+        type: 'RESELECT_TEAM'
+    }
+}
+export const saveChanges = (dispatch, getState) => {
+    dispatch({type:'SAVEING_CHANGES'})
+    const state = getState()
+    setTimeout(() => dispatch({type:'SAVED_CHANGES'}), 3000)
+}

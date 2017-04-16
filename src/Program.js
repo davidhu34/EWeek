@@ -10,7 +10,6 @@ import { creationDialog, editDialog, deleteDialog, changeOrder, expand } from '.
 const Program = ({ user, owner, program, newIndex, instructions,
     newIns, editIns, deleteIns, moveIns, expand
 }) => {
-    console.log(instructions)
     const insList = instructions.map( (i, idx) =>
         <Instruction key={idx}
             index={idx+1}
@@ -35,11 +34,10 @@ const Program = ({ user, owner, program, newIndex, instructions,
 
 export default connect(
     state => {
-        console.log(state)
         const { programs, user } = state
         const program = programs[user.viewing]
         return {
-            user: user.team,
+            user: user.profile.team,
             owner: program.team,
             program: program.id,
             newIndex: program.instructionOrder.length,

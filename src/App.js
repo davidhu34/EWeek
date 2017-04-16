@@ -9,11 +9,6 @@ const App = ({ data, Add }) => {
     const size = window.innerWidth + 'x' + window.innerHeight
     const screenSize = screen.width + 'x' + screen.height
     return <div>
-        <div>{data}</div>
-        <div onClick={Add}>
-            add
-        </div>
-        {size}<br/>{screenSize}
         <Program />
         <Modal />
     </div>

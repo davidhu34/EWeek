@@ -78,15 +78,25 @@ const Modal = ({ modal, program, instruction,
                 onChange={updateTemp('then')}
             />
         </span>: null}
+        <TextField
+            floatingLabelText="Link"
+            fullWidth={true}
+            defaultValue={instruction.link}
+            onChange={updateTemp('content')}
+        />
     </span> : null
     return <Dialog
         modal={true}
         open={open}
         title={title}
+        repositionOnUpdate={true}
+        autoScrollBodyContent={true}
         actions={actionButtons}
     >
+    <div>
         {note}
         {editor}
+    </div>
     </Dialog>
 }
 

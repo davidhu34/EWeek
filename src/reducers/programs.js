@@ -16,6 +16,7 @@ const initPrograms = {
                     times: ''
                 },
                 then: '',
+                link: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
                 expansion: false
             },
             '2': {
@@ -29,6 +30,7 @@ const initPrograms = {
                     times: '2'
                 },
                 then: '3',
+                link: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
                 expansion: false
             },
             '3': {
@@ -42,6 +44,7 @@ const initPrograms = {
                     times: ''
                 },
                 then: '',
+                link: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
                 expansion: false
             }
         }

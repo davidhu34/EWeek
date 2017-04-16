@@ -1,3 +1,4 @@
+
 const initPrograms = {
     '1': {
         id: '1',
@@ -49,6 +50,10 @@ const initPrograms = {
 
 const instructions = (state, action) => {
     switch (action.type) {
+        case 'INS_DELETE':
+            let newState = state
+            delete newState[action.instruction.id]
+            return newState
         case 'INS_EXPAND':
             return {
                 ...state,
@@ -68,10 +73,36 @@ const instructions = (state, action) => {
 }
 const program = (state, action) => {
     switch (action.type) {
+        case 'INS_CREATE':
+            const newIns = '12'
+            return {
+                ...state,
+                instructions: {
+                    ...state.instructions,
+                    [newIns]: {
+                        ...action.instruction,
+                        id: newIns
+                    }
+                },
+                instructionOrder: [
+                    ...state.instructionOrder,
+                    newIns
+                ]
+            }
         case 'INS_EXPAND':
         case 'INS_UPDATE':
             return {
                 ...state,
+                instructions:
+                    instructions(state.instructions, action)
+            }
+        case 'INS_DELETE':
+            return {
+                ...state,
+                instructionOrder:
+                    state.instructionOrder.filter(
+                        i => i != action.instruction.id
+                    ),
                 instructions:
                     instructions(state.instructions, action)
             }
@@ -93,6 +124,8 @@ const program = (state, action) => {
 }
 export const programs = ( state=initPrograms, action ) => {
     switch (action.type) {
+        case 'INS_CREATE':
+        case 'INS_DELETE':
         case 'INS_EXPAND':
         case 'INS_UPDATE':
         case 'INS_CHANGE_ORDER':

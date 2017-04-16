@@ -15,10 +15,11 @@ export const editDialog = (idx, i)=> {
         instruction: i
     }
 }
-export const deleteDialog = idx => {
+export const deleteDialog = (idx, i) => {
     return {
         type: 'LAUNCH_DELETE_DIALOG',
-        index: idx
+        index: idx,
+        instruction: i
     }
 }
 export const changeOrder = (p, idx, upordown) => {

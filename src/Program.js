@@ -15,7 +15,7 @@ const Program = ({ user, owner, program, newIndex, instructions,
         <Instruction key={idx}
             index={idx+1}
             instruction={i}
-            deleteIns={deleteIns(idx)}
+            deleteIns={deleteIns(idx, i)}
             editIns={editIns(idx, i)}
             moveUp={moveIns(program, idx, true)}
             moveDown={moveIns(program, idx, false)}
@@ -52,7 +52,7 @@ export default connect(
         return {
             newIns: (idx) => (e) => dispatch(creationDialog(idx)),
             editIns: (idx, i) => (e) => dispatch(editDialog(idx, i)),
-            deleteIns: (idx) => (e) => dispatch(deleteDialog(idx)),
+            deleteIns: (idx, i) => (e) => dispatch(deleteDialog(idx ,i)),
             moveIns: (p, idx, up) => (e) => dispatch(changeOrder(p, idx, up)),
             expand: (p, ins) => (willExpand) => { dispatch(expand(p, ins, willExpand)) }
         }

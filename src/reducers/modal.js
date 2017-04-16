@@ -16,7 +16,7 @@ export const modal = ( state=initModal, action ) => {
                 idx: action.index,
                 title: 'Delete #'+String(action.index+1),
                 note: 'Delete this instruction?',
-                tempIns: null
+                tempIns: action.instruction
             }
         case 'LAUNCH_EDIT_DIALOG':
             return {
@@ -36,7 +36,7 @@ export const modal = ( state=initModal, action ) => {
                 note: 'create new instruction',
                 tempIns: {
                     name: '',
-                    type: '',
+                    type: 'do',
                     content: '',
                     repeat: {
                         from: '',
@@ -84,6 +84,8 @@ export const modal = ( state=initModal, action ) => {
                     }
             }
         case 'CLOSE_DIALOG':
+        case 'INS_CREATE':
+        case 'INS_DELETE':
             return initModal
         default:
             return state

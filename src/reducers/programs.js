@@ -8,7 +8,13 @@ const initPrograms = {
                 id: '1',
                 name: 'Join Dark',
                 type: 'do',
-                content: 'Join me to the dark side'
+                content: 'Join me to the dark side',
+                repeat: {
+                    from: '',
+                    to: '',
+                    times: ''
+                },
+                then: ''
             },
             '2': {
                 id: '2',
@@ -26,7 +32,13 @@ const initPrograms = {
                 id: '3',
                 name: 'Return to Light',
                 type: 'do',
-                content: 'come back to the light'
+                content: 'come back to the light',
+                repeat: {
+                    from: '',
+                    to: '',
+                    times: ''
+                },
+                then: ''
             }
         }
     }

@@ -43,6 +43,7 @@ export const modal = ( state=initModal, action ) => {
                         to: '',
                         times: ''
                     },
+                    then: ''
                 }
             }
         case 'UPDATE_TEMP':
@@ -71,6 +72,7 @@ export const modal = ( state=initModal, action ) => {
                     }
                 case 'name':
                 case 'content':
+                case 'then':
                 default:
                     return {
                         ...state,

@@ -22,6 +22,7 @@ const Modal = ({ modal, program, instruction,
     const editor = type==='update' || type==='create'? <span>
         <TextField
             floatingLabelText="Name"
+            fullWidth={true}
             defaultValue={instruction.name}
             onChange={updateTemp('name')}
         />
@@ -44,7 +45,7 @@ const Modal = ({ modal, program, instruction,
         {(instruction.type==='repeat')? <span>
             repeat
             <TextField
-                floatingLabelText="From"
+                floatingLabelText="From #"
                 fullWidth={true}
                 defaultValue={
                     instruction.repeat?
@@ -53,7 +54,7 @@ const Modal = ({ modal, program, instruction,
                 onChange={updateTemp('from')}
             />
             <TextField
-                floatingLabelText="To"
+                floatingLabelText="To #"
                 fullWidth={true}
                 defaultValue={
                     instruction.repeat?
@@ -61,17 +62,22 @@ const Modal = ({ modal, program, instruction,
                 onChange={updateTemp('to')}
             />
             <TextField
-                floatingLabelText="Times"
+                floatingLabelText="Repeat Times"
                 fullWidth={true}
                 defaultValue={
                     instruction.repeat?
                         instruction.repeat.times: ''}
                 onChange={updateTemp('times')}
             />
+            <TextField
+                floatingLabelText="After all repetition, to #"
+                fullWidth={true}
+                defaultValue={
+                    instruction.then?
+                        instruction.then: ''}
+                onChange={updateTemp('then')}
+            />
         </span>: null}
-        <TextField
-            floatingLabelText="Next"
-        />
     </span> : null
     return <Dialog
         modal={true}

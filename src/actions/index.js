@@ -1,4 +1,4 @@
-//import from './api'
+import { socketLogin } from './api'
 
 export const Add = () => ({
     type: 'ADD'
@@ -78,22 +78,9 @@ export const updateLogin = (attr, value) => {
 export const submitLogin = login => dispatch => {
     console.log('thunk login')
     const { Class, team, password } = login
+     console.log(Class, team, password)
     if ( Class && team && password ) {
-        if(password === '123') {
-            dispatch({
-                type: 'LOGIN',
-                profile: {
-                    id: 1,
-                    ...login
-                }
-            })
-            dispatch({
-                type: 'FETCH_PROGRAMS',
-                programs: {}
-            })
-        } else {
-            dispatch(updateLogin('info', 'wrong password'))
-        }
+        socketLogin(login)
     } else {
         dispatch(updateLogin('info', 'please comlpete form'))
     }

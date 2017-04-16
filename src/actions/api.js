@@ -10,6 +10,14 @@ const newMsg = msg => {
     console.log('emit', payload)
     socket.emit('MESSAGE', payload)
 }
+const socketLogin = login => {
+    console.log('emit LOGIN')
+    socket.emit('LOGIN', {
+        Class: login.Class,
+        team: login.team,
+        password: login.password
+    })
+}
 
 const api = (dispatch) => {
     socket.on( 'connect', () => {
@@ -19,9 +27,30 @@ const api = (dispatch) => {
             type: 'SOCKET_CONNECT'
         })
     })
-
-    socket.on('INIT_DATE', (data) => {
-        console.log('received data', data)
+    socket.on( 'LOGIN_FAIL', data => {
+        console.log('LOGIN_FAIL:', data)
+        const classErr = data.Class? 'invalid Class':''
+        const pwdErr = data.password? 'wrong password': ''
+        const errMsg = data.password && data.Class?
+            classErr+' | '+pwdErr : classErr+pwdErr
+        dispatch({
+            type: 'UPDATE_LOGIN',
+            attribute: 'info',
+            value: errMsg
+        })
+    })
+    socket.on( 'LOGIN_SUCCESS', data => {
+        console.log('LOGIN_SUCCESS:', data)
+        dispatch({
+            type: 'LOGIN',
+            profile: data.profile
+        })
+    })
+    socket.on( 'PROGRAM_DATA', data => {
+        dispatch({
+            type: 'FETCH_PROGRAMS',
+            programs: JSON.parse(data)
+        })
     })
 }
-export { api, newMsg }
+export { api, socketLogin }

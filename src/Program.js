@@ -7,24 +7,25 @@ import ActionNoteAdd from 'material-ui/svg-icons/action/note-add'
 
 import { creationDialog, editDialog, deleteDialog, changeOrder } from './actions'
 
-const Program = ({ user, owner, program, instructions,
+const Program = ({ user, owner, program, newIndex, instructions,
     newIns, editIns, deleteIns, moveIns
 }) => {
+    console.log(instructions)
     const insList = instructions.map( (i, idx) =>
         <Instruction key={idx}
             index={idx+1}
             instruction={i}
             deleteIns={deleteIns(idx)}
-            editIns={editIns(idx)}
-            moveUp={moveIns(idx, true)}
-            moveDown={moveIns(idx, false)}
+            editIns={editIns(idx, i)}
+            moveUp={moveIns(program, idx, true)}
+            moveDown={moveIns(program, idx, false)}
             isEditor={owner === user} />
     )
     if (owner === user) insList.push(
         <FlatButton label="new"
             fullWidth={true}
             icon={<ActionNoteAdd />}
-            onClick={newIns()}/>
+            onClick={newIns(newIndex)}/>
     )
     return <div>
         {insList}
@@ -40,6 +41,7 @@ export default connect(
             user: user.team,
             owner: program.team,
             program: program.id,
+            newIndex: program.instructionOrder.length,
             instructions: program.instructionOrder.map(
                 id => program.instructions[id]
             )
@@ -47,10 +49,10 @@ export default connect(
     },
     dispatch => {
         return {
-            newIns: () => (e) => dispatch(creationDialog),
-            editIns: (idx) => (e) => dispatch(editDialog(idx)),
+            newIns: (idx) => (e) => dispatch(creationDialog(idx)),
+            editIns: (idx, i) => (e) => dispatch(editDialog(idx, i)),
             deleteIns: (idx) => (e) => dispatch(deleteDialog(idx)),
-            moveIns: (p, idx, up) => (e) => dispatch(changeOrder(idx, up))
+            moveIns: (p, idx, up) => (e) => dispatch(changeOrder(p, idx, up))
         }
     }
 )(Program)

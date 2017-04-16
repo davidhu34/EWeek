@@ -2,15 +2,17 @@ export const Add = () => ({
     type: 'ADD'
 })
 
-export const creationDialog = () => {
+export const creationDialog = (idx) => {
     return {
-        type: 'LAUNCH_CREATION_DIALOG'
+        type: 'LAUNCH_CREATION_DIALOG',
+        index: idx
     }
 }
-export const editDialog = idx => {
+export const editDialog = (idx, i)=> {
     return {
         type: 'LAUNCH_EDIT_DIALOG',
-        index: idx
+        index: idx,
+        instruction: i
     }
 }
 export const deleteDialog = idx => {
@@ -31,17 +33,27 @@ export const changeOrder = (p, idx, upordown) => {
 export const dialogAction = {
     'create': (p, ins) => ({
         type: 'INS_CREATE',
+        program: p,
         instruction: ins
     }),
-    'edit': (insId) => ({
+    'update': (p, ins) => ({
         type: 'INS_UPDATE',
-        instruction: insId
+        program: p,
+        instruction: ins
     }),
-    'delete': (p, idx) => ({
+    'delete': (p, ins) => ({
         type: 'INS_DELETE',
-        index: idx
+        program: p,
+        instruction: ins
     }),
     'close': () => ({
         type: 'CLOSE_DIALOG'
     })
+}
+export const updateTemp = (attr, value) => {
+    return {
+        type: 'UPDATE_TEMP',
+        attribute: attr,
+        value: value
+    }
 }

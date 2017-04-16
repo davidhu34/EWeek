@@ -5,15 +5,38 @@ import FlatButton from 'material-ui/FlatButton'
 import Dialog from 'material-ui/Dialog'
 import TextField from 'material-ui/TextField'
 
-import { dialogAction } from './actions'
+import { dialogAction, updateTemp } from './actions'
 
-const Modal = ({ modal, instructions, dialogAction }) => {
+const Modal = ({ modal, program, instruction,
+    dialogAction, updateTemp
+}) => {
     const { open, type, title, content } = modal
-    console.log(dialogAction('close'))
     const actionButtons = [
-        <FlatButton label={type} onClick={dialogAction('delete')} />,
-        <FlatButton label="cancel" onClick={dialogAction('close')} />,
+        <FlatButton label={type}
+            onClick={dialogAction(type, program, instruction)} />,
+        <FlatButton label="cancel"
+            onClick={dialogAction('close')} />,
     ]
+    const editor = type==='update' || type==='create'? <span>
+        <TextField
+            defaultValue={instruction.name}
+            floatingLabelText="Name"
+            onChange={updateTemp('name')}
+        />
+        <TextField
+            defaultValue={instruction.type}
+            floatingLabelText="type"
+            onChange={updateTemp('type')}
+        />
+        <TextField
+            defaultValue={instruction.content}
+            floatingLabelText="Content"
+            onChange={updateTemp('content')}
+        />
+        <TextField
+            floatingLabelText="Next"
+        />
+    </span> : null
     return <Dialog
         modal={true}
         open={open}
@@ -21,18 +44,7 @@ const Modal = ({ modal, instructions, dialogAction }) => {
         actions={actionButtons}
     >
         {content}
-        <TextField
-            floatingLabelText="Name"
-        />
-        <TextField
-            floatingLabelText="type"
-        />
-        <TextField
-            floatingLabelText="Content"
-        />
-        <TextField
-            floatingLabelText="Next"
-        />
+        {editor}
     </Dialog>
 }
 
@@ -42,14 +54,16 @@ export default connect(
         const modal = state.modal
         const viewing = state.user.viewing
         const program = state.programs[viewing]
-        const ins = program.instructionOrder[modal.idx]
         return {
             modal: modal,
-            instructions: program.instructions[ins]
+            program: program.id,
+            instruction: modal.tempIns
         }
     },
     dispatch => ({
-        dialogAction: (dialogType, ins, idx) =>
-            (e) => dispatch( dialogAction[dialogType](ins, idx) )
+        dialogAction: (dialogType, p, ins) =>
+            (e) => dispatch( dialogAction[dialogType](p, ins) ),
+        updateTemp: (attr) =>
+            (e) => dispatch( updateTemp(attr, e.target.value) )
     })
 )(Modal)

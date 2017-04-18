@@ -1,6 +1,7 @@
 "use strict"
 //var debug = require('debug')('REM:server');
 const http = require('http')
+const https = require('https')
 const path = require('path')
 const socketio = require('socket.io');
 const express = require('express');

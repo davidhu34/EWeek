@@ -82,7 +82,7 @@ const Modal = ({ modal, program, instruction,
             floatingLabelText="Link"
             fullWidth={true}
             defaultValue={instruction.link}
-            onChange={updateTemp('content')}
+            onChange={updateTemp('link')}
         />
     </span> : null
     return <Dialog

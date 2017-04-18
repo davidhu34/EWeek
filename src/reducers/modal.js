@@ -86,6 +86,7 @@ export const modal = ( state=initModal, action ) => {
             }
         case 'CLOSE_DIALOG':
         case 'INS_CREATE':
+        case 'INS_UPDATE':
         case 'INS_DELETE':
             return initModal
         default:

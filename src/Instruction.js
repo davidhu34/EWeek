@@ -34,7 +34,10 @@ const Instruction = ({ index, instruction, isEditor,
     </CardActions> : <CardActions expandable={true}>
         <FlatButton label="media link"
             icon={<AvMovie/>}
-            onClick={(e) => {window.open(link)}}/>
+            onClick={(e) => {
+                console.log('OPEN LINK', link)
+                window.open(link)
+            }}/>
     </CardActions>
 
     const repeatSeq = (repeat.from === repeat.to)?

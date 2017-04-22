@@ -12,7 +12,7 @@ import { dialogAction, updateTemp } from './actions'
 const Modal = ({ modal, program, instruction,
     dialogAction, updateTemp
 }) => {
-    const { open, type, title, note } = modal
+    const { open, type, title, note, scroll } = modal
     const actionButtons = [
         <FlatButton label={type}
             onClick={dialogAction(type, program, instruction)} />,
@@ -85,19 +85,29 @@ const Modal = ({ modal, program, instruction,
             onChange={updateTemp('link')}
         />
     </span> : null
-    return <Dialog
-        modal={true}
-        open={open}
-        title={title}
-        repositionOnUpdate={true}
-        autoScrollBodyContent={true}
-        actions={actionButtons}
-    >
-    <div>
+    const body = document.body
+    const html = document.documentElement
+    const maxH = Math.max( body.scrollHeight, body.offsetHeight, 
+                       html.clientHeight, html.scrollHeight, html.offsetHeight )
+    console.log(body.scrollTop)
+    return open? <div
+        style={{
+            zIndex: 2,
+            width: '100%',
+            height: maxH,
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            backgroundColor: 'rgba(255,255,255,0.9)',
+            //WebkitTextFillColor: 'transparent',
+            //WebkitBackgroundClip: 'text'
+        }}>
+    <div style={{ position: 'absolute',top: scroll, left: 50}}>
         {note}
         {editor}
+        {actionButtons}
     </div>
-    </Dialog>
+    </div>:null
 }
 
 

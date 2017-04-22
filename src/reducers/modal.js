@@ -16,7 +16,8 @@ export const modal = ( state=initModal, action ) => {
                 idx: action.index,
                 title: 'Delete #'+String(action.index+1),
                 note: 'Delete this instruction?',
-                tempIns: action.instruction
+                tempIns: action.instruction,
+                scroll: document.body.scrollTop
             }
         case 'LAUNCH_EDIT_DIALOG':
             return {
@@ -25,7 +26,8 @@ export const modal = ( state=initModal, action ) => {
                 idx: action.index,
                 title: 'Edit #'+String(action.index+1),
                 note: 'click UPDATE to save changes',
-                tempIns: action.instruction
+                tempIns: action.instruction,
+                scroll: document.body.scrollTop
             }
         case 'LAUNCH_CREATION_DIALOG':
             return {
@@ -46,7 +48,8 @@ export const modal = ( state=initModal, action ) => {
                     then: '',
                     link: '',
                     expansion: true
-                }
+                },
+                scroll: document.body.scrollTop
             }
         case 'UPDATE_TEMP':
             const attr = action.attribute

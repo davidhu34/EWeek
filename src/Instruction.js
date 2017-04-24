@@ -17,51 +17,54 @@ const Instruction = ({ index, instruction, isEditor,
 }) => {
     const { name, type, content, repeat, then, link, expansion } = instruction
     const actionButtons = isEditor? <CardActions expandable={true}>
-        <FlatButton label="edit"
+        <FlatButton label="編輯"
             icon={<EditorModeEdit/>}
             onClick={editIns}/>/>
-        <FlatButton label="delete"
+        <FlatButton label="刪除"
             icon={<ActionDelete/>}
             onClick={deleteIns}/>
-        <IconButton tooltip="upward"
+        <IconButton tooltip="往上移動"
             onClick={moveUp}>
             <NavigationArrowUpward/>
         </IconButton>
-        <IconButton tooltip="downward"
+        <IconButton tooltip="往下移動"
             onClick={moveDown}>
             <NavigationArrowDownward/>
         </IconButton>
-    </CardActions> : <CardActions expandable={true}>
-        <FlatButton label="media link"
-            icon={<AvMovie/>}
-            onClick={(e) => {
-                console.log('OPEN LINK', link)
-                window.open(link)
-            }}/>
-    </CardActions>
+    </CardActions> : null
 
-    const repeatSeq = (repeat.from === repeat.to)?
-        '#'+repeat.from: '#'+repeat.from+'~#'+repeat.to
-    const repeatContent = 'repeat '+repeatSeq+' for '
-        +repeat.times+' times. Then, go to #'+then
-    const linkContent = isEditor?  <div>{link}</div>: null
+    const insStr = expansion? name
+        : name.slice(0, 13)+'...'
     return <Card expanded={expansion} onExpandChange={expand}>
         <CardHeader
-            title={String(index)+'. '+name}
-            subtitle={type}
+            title={String(index)+'. '+insStr}
             actAsExpander={true}
             showExpandableButton={true}
         />
         <CardText expandable={true}>
             {content}
-            {linkContent}
         </CardText>
-        {type === 'repeat'? <CardText expandable={true}>
-            {repeatContent}
-        </CardText>:null}
         {actionButtons}
     </Card>
 }
 
 export default Instruction
 //export default connect( state => ({}) )(Instruction)
+/*
+//rendering
+const repeatSeq = (repeat.from === repeat.to)?
+    '#'+repeat.from: '#'+repeat.from+'~#'+repeat.to
+const repeatContent = 'repeat '+repeatSeq+' for '
+    +repeat.times+' times. Then, go to #'+then
+const linkContent = isEditor?  <div>{link}</div>: null
+
+//link button
+<CardActions expandable={true}>
+    <FlatButton label={link}
+        icon={<AvMovie/>}
+        onClick={(e) => {
+            console.log('OPEN LINK', link)
+            window.open(link)
+        }}/>
+</CardActions>
+*/

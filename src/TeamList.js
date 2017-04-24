@@ -13,7 +13,7 @@ const TeamList = ({ programs, selectProgram }) => {
         />
     )
     return <div>
-        <FlatButton label="select teams' work"
+        <FlatButton label="選擇欲瀏覽指令的隊伍"
             fullWidth={true}
             disabled={true} />
         {buttons}

@@ -10,21 +10,21 @@ import { updateLogin, submitLogin } from './actions'
 const Login = ({ login, updateLogin, submitLogin }) => {
     return <div>
         <TextField
-            floatingLabelText="Class"
+            floatingLabelText="班級"
             fullWidth={true}
             onChange={updateLogin('Class')}
         />
         <TextField
-            floatingLabelText="Team"
+            floatingLabelText="隊伍"
             fullWidth={true}
             onChange={updateLogin('team')}
         />
         <TextField
-            floatingLabelText="Password"
+            floatingLabelText="密碼"
             fullWidth={true}
             onChange={updateLogin('password')}
         />
-        <FlatButton label="Login"
+        <FlatButton label="登入"
             fullWidth={true}
             onClick={submitLogin(login)}
         />

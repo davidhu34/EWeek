@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 
 import FlatButton from 'material-ui/FlatButton'
-import Dialog from 'material-ui/Dialog'
+//import Dialog from 'material-ui/Dialog'
 import TextField from 'material-ui/TextField'
 import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'
+import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card'
 
 import { dialogAction, updateTemp } from './actions'
 
@@ -13,81 +14,28 @@ const Modal = ({ modal, program, instruction,
     dialogAction, updateTemp
 }) => {
     const { open, type, title, note, scroll } = modal
+    const labels = {
+        update: '確認更新',
+        delete: '刪除',
+        create: '建立',
+    }
     const actionButtons = [
-        <FlatButton label={type}
+        <FlatButton label={labels[type] || ''}
             onClick={dialogAction(type, program, instruction)} />,
-        <FlatButton label="cancel"
+        <FlatButton label="取消"
             onClick={dialogAction('close')} />,
     ]
     const editor = type==='update' || type==='create'? <span>
         <TextField
-            floatingLabelText="Name"
+            floatingLabelText="指令"
             fullWidth={true}
             defaultValue={instruction.name}
             onChange={updateTemp('name')}
         />
-        <SelectField
-            fullWidth={true}
-            floatingLabelText="Type"
-            value={instruction.type === 'do'? 1: 2}
-            onChange={updateTemp('type')}
-        >
-            <MenuItem value={1} primaryText="do" />
-            <MenuItem value={2} primaryText="repeat" />
-        </SelectField>
-        <TextField
-            floatingLabelText="Content"
-            multiLine={true}
-            fullWidth={true}
-            defaultValue={instruction.content}
-            onChange={updateTemp('content')}
-        />
-        {(instruction.type==='repeat')? <span>
-            repeat
-            <TextField
-                floatingLabelText="From #"
-                fullWidth={true}
-                defaultValue={
-                    instruction.repeat?
-                        instruction.repeat.from: ''
-                }
-                onChange={updateTemp('from')}
-            />
-            <TextField
-                floatingLabelText="To #"
-                fullWidth={true}
-                defaultValue={
-                    instruction.repeat?
-                        instruction.repeat.to: ''}
-                onChange={updateTemp('to')}
-            />
-            <TextField
-                floatingLabelText="Repeat Times"
-                fullWidth={true}
-                defaultValue={
-                    instruction.repeat?
-                        instruction.repeat.times: ''}
-                onChange={updateTemp('times')}
-            />
-            <TextField
-                floatingLabelText="After all repetition, to #"
-                fullWidth={true}
-                defaultValue={
-                    instruction.then?
-                        instruction.then: ''}
-                onChange={updateTemp('then')}
-            />
-        </span>: null}
-        <TextField
-            floatingLabelText="Link"
-            fullWidth={true}
-            defaultValue={instruction.link}
-            onChange={updateTemp('link')}
-        />
     </span> : null
     const body = document.body
     const html = document.documentElement
-    const maxH = Math.max( body.scrollHeight, body.offsetHeight, 
+    const maxH = Math.max( body.scrollHeight, body.offsetHeight,
                        html.clientHeight, html.scrollHeight, html.offsetHeight )
     console.log(body.scrollTop)
     return open? <div
@@ -102,12 +50,20 @@ const Modal = ({ modal, program, instruction,
             //WebkitTextFillColor: 'transparent',
             //WebkitBackgroundClip: 'text'
         }}>
-    <div style={{ position: 'absolute',top: scroll, left: 50}}>
-        {note}
-        {editor}
-        {actionButtons}
-    </div>
-    </div>:null
+    <div style={{ position: 'absolute',top: scroll}}>
+        <Card>
+            <CardHeader
+                title={title}
+                subtitle={note}
+            />
+            <CardText>
+                {editor}
+            </CardText>
+            <CardActions>
+                {actionButtons}
+            </CardActions>
+        </Card>
+    </div></div>:null
 }
 
 
@@ -129,3 +85,65 @@ export default connect(
             (e, idx, v) => dispatch( updateTemp(attr, e.target.value || v) )
     })
 )(Modal)
+
+/*
+//old version
+<SelectField
+    fullWidth={true}
+    floatingLabelText="Type"
+    value={instruction.type === 'do'? 1: 2}
+    onChange={updateTemp('type')}
+>
+    <MenuItem value={1} primaryText="do" />
+    <MenuItem value={2} primaryText="repeat" />
+</SelectField>
+<TextField
+    floatingLabelText="Content"
+    multiLine={true}
+    fullWidth={true}
+    defaultValue={instruction.content}
+    onChange={updateTemp('content')}
+/>
+{(instruction.type==='repeat')? <span>
+    repeat
+    <TextField
+        floatingLabelText="From #"
+        fullWidth={true}
+        defaultValue={
+            instruction.repeat?
+                instruction.repeat.from: ''
+        }
+        onChange={updateTemp('from')}
+    />
+    <TextField
+        floatingLabelText="To #"
+        fullWidth={true}
+        defaultValue={
+            instruction.repeat?
+                instruction.repeat.to: ''}
+        onChange={updateTemp('to')}
+    />
+    <TextField
+        floatingLabelText="Repeat Times"
+        fullWidth={true}
+        defaultValue={
+            instruction.repeat?
+                instruction.repeat.times: ''}
+        onChange={updateTemp('times')}
+    />
+    <TextField
+        floatingLabelText="After all repetition, to #"
+        fullWidth={true}
+        defaultValue={
+            instruction.then?
+                instruction.then: ''}
+        onChange={updateTemp('then')}
+    />
+</span>: null}
+<TextField
+    floatingLabelText="Link"
+    fullWidth={true}
+    defaultValue={instruction.link}
+    onChange={updateTemp('link')}
+/>
+*/

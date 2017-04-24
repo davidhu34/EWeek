@@ -14,8 +14,10 @@ export const modal = ( state=initModal, action ) => {
                 open: true,
                 type: 'delete',
                 idx: action.index,
-                title: 'Delete #'+String(action.index+1),
-                note: 'Delete this instruction?',
+                //title: 'Delete #'+String(action.index+1),
+                //note: 'Delete this instruction?',
+                title: '刪除 #'+String(action.index+1),
+                note: '確定要刪除這項指令？',
                 tempIns: action.instruction,
                 scroll: document.body.scrollTop
             }
@@ -24,8 +26,10 @@ export const modal = ( state=initModal, action ) => {
                 open: true,
                 type: 'update',
                 idx: action.index,
-                title: 'Edit #'+String(action.index+1),
-                note: 'click UPDATE to save changes',
+                //title: 'Edit #'+String(action.index+1),
+                //note: 'click UPDATE to save changes',
+                title: '編輯 #'+String(action.index+1),
+                note: '按\"確認更新\"以儲存變更',
                 tempIns: action.instruction,
                 scroll: document.body.scrollTop
             }
@@ -34,8 +38,10 @@ export const modal = ( state=initModal, action ) => {
                 open: true,
                 type: 'create',
                 idx: action.index,
-                title: 'Creating #'+String(action.index+1),
-                note: 'create new instruction',
+                //title: 'Creating #'+String(action.index+1),
+                //note: 'create new instruction',
+                title: '建立 #'+String(action.index+1),
+                note: '建立新的指令',
                 tempIns: {
                     name: '',
                     type: 'do',

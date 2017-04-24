@@ -25,21 +25,23 @@ const App = ({ user, reselectTeam, saveChanges }) => {
         </div>: <TeamList />
     ): <Login />
     const Nav = <div>
-        <FlatButton label="Login"
+        <FlatButton label={user.profile === null?
+                "登入": user.profile.team
+            }
             icon={user.profile === null?
                 <ActionLockOutline />
                 :<ActionLockOpen />}
             disabled={user.login === null} />
-        <FlatButton label="Teams"
+        <FlatButton label="隊伍"
             icon={<SocialGroup />}
             disabled={user.profile === null}
             onClick={reselectTeam}/>
-        <FlatButton label="Program"
+        <FlatButton label="指令"
             icon={<ActionFormatListNumbered />}
             disabled={user.viewing === null} />
         {(user.profile)?
             (user.viewing === user.profile.id)?
-                <FlatButton label="Save Changes"
+                <FlatButton label="儲存變更"
                     icon={<ContentSave />}
                     disabled={user.saving}
                     onClick={saveChanges}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 
-import FlatButton from 'material-ui/FlatButton'
+import RaisedButton from 'material-ui/RaisedButton'
 //import Dialog from 'material-ui/Dialog'
 import TextField from 'material-ui/TextField'
 import SelectField from 'material-ui/SelectField'
@@ -9,29 +9,45 @@ import MenuItem from 'material-ui/MenuItem'
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card'
 import CircularProgress from 'material-ui/CircularProgress'
 
+import ContentSave from 'material-ui/svg-icons/content/save'
+import ActionDelete from 'material-ui/svg-icons/action/delete'
+import ActionNoteAdd from 'material-ui/svg-icons/action/note-add'
+
 import { dialogAction, closeDialog, updateTemp } from './actions'
+import { textFieldColors } from './styles'
 
 const Modal = ({ modal, program, instruction, saving,
     dialogAction, closeDialog, updateTemp
 }) => {
     const { open, type, title, note, scroll } = modal
-    const labels = {
-        update: '確認更新',
-        delete: '刪除',
-        create: '建立',
+
+    const actionProps = {
+        update: {
+            label: '確認更新',
+            icon: <ContentSave />
+        },
+        delete: {
+            label: '刪除',
+            icon: <ActionDelete />
+        },
+        create: {
+            label: '建立',
+            icon: <ActionNoteAdd />
+        }
     }
-    const actionButtons = saving? <CircularProgress />
-        : [
-            <FlatButton label={labels[type] || ''}
-                onClick={dialogAction(type, program, instruction)} />,
-            <FlatButton label="取消"
+    const actionButtons = saving? <CircularProgress color="#466BB0"/>
+        : <CardActions>
+            <RaisedButton {...actionProps[type]}
+                onClick={dialogAction(type, program, instruction)} />
+            <RaisedButton label="取消"
                 onClick={closeDialog} />
-        ]
+        </CardActions>
     const editor = type==='update' || type==='create'? <span>
         <TextField
             floatingLabelText="指令"
             fullWidth={true}
             defaultValue={instruction.name}
+            {...textFieldColors}
             onChange={updateTemp('name')}
         />
     </span> : null
@@ -39,7 +55,6 @@ const Modal = ({ modal, program, instruction, saving,
     const html = document.documentElement
     const maxH = Math.max( body.scrollHeight, body.offsetHeight,
                        html.clientHeight, html.scrollHeight, html.offsetHeight )
-    console.log(body.scrollTop)
     return open? <div
         style={{
             zIndex: 2,
@@ -48,23 +63,23 @@ const Modal = ({ modal, program, instruction, saving,
             position: 'absolute',
             top: 0,
             left: 0,
-            backgroundColor: 'rgba(255,255,255,0.9)',
+            backgroundColor: 'rgba(255,255,255,0.95)',
             //WebkitTextFillColor: 'transparent',
             //WebkitBackgroundClip: 'text'
         }}>
     <div style={{ position: 'absolute',top: scroll}}>
-        <Card style={{width:'100%'}}>
+
+            <b>
             <CardHeader
                 title={title}
                 subtitle={note}
             />
+            </b>
             <CardText>
                 {editor}
             </CardText>
-            <CardActions>
-                {actionButtons}
-            </CardActions>
-        </Card>
+            {actionButtons}
+
     </div></div>:null
 }
 

@@ -17,19 +17,19 @@ const Instruction = ({ index, instruction, isEditor,
 }) => {
     const { name, type, content, repeat, then, link, expansion } = instruction
     const actionButtons = isEditor? <CardActions expandable={true}>
-        <FlatButton label="編輯"
+        <FlatButton label="編輯" style={{color: "#466BB0"}}
             icon={<EditorModeEdit/>}
             onClick={editIns}/>/>
-        <FlatButton label="刪除"
+        <FlatButton label="刪除" style={{color: "#466BB0"}}
             icon={<ActionDelete/>}
             onClick={deleteIns}/>
-        <IconButton tooltip="往上移動"
+        <IconButton tooltip="往上移動" style={{color: "#466BB0"}}
             onClick={moveUp}>
-            <NavigationArrowUpward/>
+            <NavigationArrowUpward color="#466BB0" />
         </IconButton>
         <IconButton tooltip="往下移動"
             onClick={moveDown}>
-            <NavigationArrowDownward/>
+            <NavigationArrowDownward color="#466BB0" />
         </IconButton>
     </CardActions> : null
 

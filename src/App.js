@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Add } from './actions'
 
 import FlatButton from 'material-ui/FlatButton'
+import AppBar from 'material-ui/AppBar'
 
 import ActionLockOpen from 'material-ui/svg-icons/action/lock-open'
 import ActionLockOutline from 'material-ui/svg-icons/action/lock-outline'
@@ -18,12 +19,7 @@ import Modal from './Modal'
 import { reselectTeam, saveChanges } from './actions'
 
 const App = ({ user, reselectTeam, saveChanges }) => {
-    const ui = (user.profile)? (
-        (user.viewing)? <div>
-            <Program />
-            <Modal />
-        </div>: <TeamList />
-    ): <Login />
+
     const Nav = <div>
         <FlatButton label={user.profile === null?
                 "登入": user.profile.team
@@ -40,10 +36,31 @@ const App = ({ user, reselectTeam, saveChanges }) => {
             icon={<ActionFormatListNumbered />}
             disabled={user.viewing === null} />
     </div>
+    const ui = (user.profile)? (
+        (user.viewing)? <div>
+            <Program />
+            <Modal />
+        </div>: <TeamList />
+    ): <Login />
     return <div>
-        {Nav}
-        <br/>
-        {ui}
+        <AppBar title="EWeek game"
+            showMenuIconButton={false}
+            style={{
+                backgroundColor: "#466BB0",
+                height: 50
+            }}
+            iconElementRight={
+                <img src="ibm.png" height="22px" width="58px"/>
+            }
+            iconStyleRight={{
+                paddingTop: 13
+            }}
+        />
+        <div style={{margin: '8px'}}>
+            {Nav}
+            <br/>
+            {ui}
+        </div>
     </div>
 }
 

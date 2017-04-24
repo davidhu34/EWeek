@@ -8,6 +8,7 @@ import { selectProgram } from './actions'
 const TeamList = ({ programs, selectProgram }) => {
     const buttons = programs.map( p =>
         <FlatButton label={p.team}
+            style={{color: "#466BB0"}}
             fullWidth={true}
             onClick={selectProgram(p.id)}
         />

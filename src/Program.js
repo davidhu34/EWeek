@@ -22,7 +22,7 @@ const Program = ({ user, owner, program, newIndex, instructions,
             isEditor={owner === user} />
     )
     if (owner === user) insList.push(
-        <FlatButton label="new"
+        <FlatButton key="new" label="new"
             fullWidth={true}
             icon={<ActionNoteAdd />}
             onClick={newIns(newIndex)}/>

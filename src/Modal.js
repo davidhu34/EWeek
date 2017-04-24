@@ -7,11 +7,12 @@ import TextField from 'material-ui/TextField'
 import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card'
+import CircularProgress from 'material-ui/CircularProgress'
 
-import { dialogAction, updateTemp } from './actions'
+import { dialogAction, closeDialog, updateTemp } from './actions'
 
-const Modal = ({ modal, program, instruction,
-    dialogAction, updateTemp
+const Modal = ({ modal, program, instruction, saving,
+    dialogAction, closeDialog, updateTemp
 }) => {
     const { open, type, title, note, scroll } = modal
     const labels = {
@@ -19,12 +20,13 @@ const Modal = ({ modal, program, instruction,
         delete: '刪除',
         create: '建立',
     }
-    const actionButtons = [
-        <FlatButton label={labels[type] || ''}
-            onClick={dialogAction(type, program, instruction)} />,
-        <FlatButton label="取消"
-            onClick={dialogAction('close')} />,
-    ]
+    const actionButtons = saving? <CircularProgress />
+        : [
+            <FlatButton label={labels[type] || ''}
+                onClick={dialogAction(type, program, instruction)} />,
+            <FlatButton label="取消"
+                onClick={closeDialog} />
+        ]
     const editor = type==='update' || type==='create'? <span>
         <TextField
             floatingLabelText="指令"
@@ -51,7 +53,7 @@ const Modal = ({ modal, program, instruction,
             //WebkitBackgroundClip: 'text'
         }}>
     <div style={{ position: 'absolute',top: scroll}}>
-        <Card>
+        <Card style={{width:'100%'}}>
             <CardHeader
                 title={title}
                 subtitle={note}
@@ -70,17 +72,19 @@ const Modal = ({ modal, program, instruction,
 export default connect(
     state => {
         const modal = state.modal
-        const viewing = state.user.viewing
+        const { viewing, saving } = state.user
         const program = state.programs[viewing]
         return {
             modal: modal,
+            saving: saving,
             program: program.id,
             instruction: modal.tempIns
         }
     },
     dispatch => ({
         dialogAction: (dialogType, p, ins) =>
-            (e) => dispatch( dialogAction[dialogType](p, ins) ),
+            (e) => dispatch( dialogAction(dialogType, p, ins) ),
+        closeDialog: (e) => dispatch(closeDialog),
         updateTemp: (attr) =>
             (e, idx, v) => dispatch( updateTemp(attr, e.target.value || v) )
     })

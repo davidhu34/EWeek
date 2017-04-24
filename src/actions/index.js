@@ -40,25 +40,26 @@ export const expand = (p, ins, e) => ({
     expansion: e
 })
 
-export const dialogAction = {
-    'create': (p, ins) => ({
-        type: 'INS_CREATE',
-        program: p,
-        instruction: ins
-    }),
-    'update': (p, ins) => ({
-        type: 'INS_UPDATE',
-        program: p,
-        instruction: ins
-    }),
-    'delete': (p, ins) => ({
-        type: 'INS_DELETE',
-        program: p,
-        instruction: ins
-    }),
-    'close': () => ({
-        type: 'CLOSE_DIALOG'
-    })
+export const dialogAction = (t, p, ins) => {
+    const type = {
+        'create': 'INS_CREATE',
+        'update': 'INS_UPDATE',
+        'delete': 'INS_DELETE'
+    }
+    return (dispatch, getState) => {
+        dispatch({
+            type: type[t],
+            program: p,
+            instruction: ins
+        })
+        dispatch({type:'SAVING_CHANGES'})
+        const state = getState()
+        emitChanges(state.programs[state.user.profile.id])
+    }
+}
+
+export const closeDialog = {
+    type: 'CLOSE_DIALOG'
 }
 export const updateTemp = (attr, value) => {
     return {

@@ -39,15 +39,6 @@ const App = ({ user, reselectTeam, saveChanges }) => {
         <FlatButton label="指令"
             icon={<ActionFormatListNumbered />}
             disabled={user.viewing === null} />
-        {(user.profile)?
-            (user.viewing === user.profile.id)?
-                <FlatButton label="儲存變更"
-                    icon={<ContentSave />}
-                    disabled={user.saving}
-                    onClick={saveChanges}
-                />: null
-            : null
-        }
     </div>
     return <div>
         {Nav}
@@ -64,3 +55,15 @@ export default connect(
         saveChanges: (e) => dispatch( saveChanges ),
     })
 )(App)
+/*
+//save changes
+{(user.profile)?
+    (user.viewing === user.profile.id)?
+        <FlatButton label="儲存變更"
+            icon={<ContentSave />}
+            disabled={user.saving}
+            onClick={saveChanges}
+        />: null
+    : null
+}
+*/

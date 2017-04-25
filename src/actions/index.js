@@ -24,6 +24,21 @@ export const deleteDialog = (idx, i) => {
         instruction: i
     }
 }
+
+export const expand = (p, idx, e) => ({
+    type: 'INS_EXPAND',
+    program: p,
+    index: idx,
+    expansion: e
+})
+
+export const startMove = (idx, o) => {
+    return {
+        type: 'INS_START_MOVE',
+        index: idx,
+        order: o
+    }
+}
 export const changeOrder = (p, idx, upordown) => {
     return {
         type: 'INS_CHANGE_ORDER',
@@ -33,13 +48,22 @@ export const changeOrder = (p, idx, upordown) => {
     }
 }
 
-export const expand = (p, ins, e) => ({
-    type: 'INS_EXPAND',
-    program: p,
-    instruction: ins,
-    expansion: e
-})
-
+export const endMove = (idx, o, finish) => {
+    return (dispatch, getState) => {
+        console.log(dispatch, getState)
+        const state = getState()
+        const p = state.programs[state.user.profile.id]
+        dispatch({
+            type: finish? 'INS_FINISH_MOVE': 'INS_CANCEL_MOVE',
+            order: o,
+            program: p.id
+        })
+        if (finish) {
+            dispatch({type:'SAVING_CHANGES'})
+            emitChanges(p)
+        }
+    }
+}
 export const dialogAction = (t, p, ins) => {
     const type = {
         'create': 'INS_CREATE',

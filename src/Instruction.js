@@ -8,21 +8,21 @@ import IconButton from 'material-ui/IconButton'
 
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 import ActionDelete from 'material-ui/svg-icons/action/delete'
+import ActionSwapVert from 'material-ui/svg-icons/action/swap-vert'
+import ActionDone from 'material-ui/svg-icons/action/done'
 import NavigationArrowUpward from 'material-ui/svg-icons/navigation/arrow-upward'
 import NavigationArrowDownward from 'material-ui/svg-icons/navigation/arrow-downward'
 import AvMovie from 'material-ui/svg-icons/av/movie'
+import CircularProgress from 'material-ui/CircularProgress'
 
-const Instruction = ({ index, instruction, isEditor,
-    editIns, deleteIns, moveUp, moveDown, expand
+const Instruction = ({ index, instruction, isEditor, isMoving, isSaving,
+    editIns, deleteIns, expanded, expand, startMove,
+    moveUp, moveDown, finishMove, cancelMove
 }) => {
-    const { name, type, content, repeat, then, link, expansion } = instruction
-    const actionButtons = isEditor? <CardActions expandable={true}>
-        <FlatButton label="編輯" style={{color: "#466BB0"}}
-            icon={<EditorModeEdit/>}
-            onClick={editIns}/>/>
-        <FlatButton label="刪除" style={{color: "#466BB0"}}
-            icon={<ActionDelete/>}
-            onClick={deleteIns}/>
+    console.log(finishMove, cancelMove)
+    const { name, type, content, repeat, then, link } = instruction
+    const actionButtons = isEditor? isMoving? isSaving? 
+        <CircularProgress color="#466BB0"/>: <CardActions expandable={true}>
         <IconButton tooltip="往上移動" style={{color: "#466BB0"}}
             onClick={moveUp}>
             <NavigationArrowUpward color="#466BB0" />
@@ -31,11 +31,27 @@ const Instruction = ({ index, instruction, isEditor,
             onClick={moveDown}>
             <NavigationArrowDownward color="#466BB0" />
         </IconButton>
+        <FlatButton label="完成" style={{color: "#466BB0"}}
+            icon={<ActionDone/>}
+            onClick={finishMove}/>/>
+        <FlatButton label="取消" style={{color: "#466BB0"}}
+            onClick={cancelMove}/>
+
+    </CardActions>: <CardActions expandable={true}>
+        <FlatButton label="編輯" style={{color: "#466BB0"}}
+            icon={<EditorModeEdit/>}
+            onClick={editIns}/>/>
+        <FlatButton label="刪除" style={{color: "#466BB0"}}
+            icon={<ActionDelete/>}
+            onClick={deleteIns}/>
+        <FlatButton label="移動順序" style={{color: "#466BB0"}}
+            icon={<ActionSwapVert/>}
+            onClick={startMove}/>
     </CardActions> : null
 
-    const insStr = expansion? name
+    const insStr = expanded? name
         : name.slice(0, 13)+'...'
-    return <Card expanded={expansion} onExpandChange={expand}>
+    return <Card expanded={expanded} onExpandChange={expand}>
         <CardHeader
             title={String(index)+'. '+insStr}
             actAsExpander={true}

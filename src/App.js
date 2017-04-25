@@ -30,7 +30,7 @@ const App = ({ user, reselectTeam, saveChanges }) => {
             disabled={user.login === null} />
         <FlatButton label="隊伍"
             icon={<SocialGroup />}
-            disabled={user.profile === null}
+            disabled={user.profile === null || user.moving !== null}
             onClick={reselectTeam}/>
         <FlatButton label="指令"
             icon={<ActionFormatListNumbered />}
@@ -43,10 +43,11 @@ const App = ({ user, reselectTeam, saveChanges }) => {
         </div>: <TeamList />
     ): <Login />
     return <div>
-        <AppBar title="EWeek game"
+        <AppBar title="DiscoverE game"
             showMenuIconButton={false}
             style={{
                 backgroundColor: "#466BB0",
+                zIndex: 2,
                 height: 50
             }}
             iconElementRight={

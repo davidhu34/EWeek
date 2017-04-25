@@ -10,7 +10,7 @@ const TeamList = ({ programs, selectProgram }) => {
         <FlatButton label={p.team}
             style={{color: "#466BB0"}}
             fullWidth={true}
-            onClick={selectProgram(p.id)}
+            onClick={selectProgram(p)}
         />
     )
     return <div>

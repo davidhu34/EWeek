@@ -42,7 +42,7 @@ const program = (state, action) => {
                     newIns
                 ]
             }
-        case 'INS_EXPAND':
+//        case 'INS_EXPAND':
         case 'INS_UPDATE':
             return {
                 ...state,
@@ -71,6 +71,11 @@ const program = (state, action) => {
                     ...order.slice(pos+2)
                 ]
             }: state
+        case 'INS_CANCEL_MOVE':
+            return {
+                ...state,
+                instructionOrder: action.order
+            }
         default:
             return state
     }
@@ -86,6 +91,7 @@ export const programs = ( state={}, action ) => {
         case 'INS_DELETE':
         case 'INS_EXPAND':
         case 'INS_UPDATE':
+        case 'INS_CANCEL_MOVE':
         case 'INS_CHANGE_ORDER':
             return {
                 ...state,

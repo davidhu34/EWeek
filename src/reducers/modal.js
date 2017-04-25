@@ -52,8 +52,7 @@ export const modal = ( state=initModal, action ) => {
                         times: ''
                     },
                     then: '',
-                    link: '',
-                    expansion: true
+                    link: ''
                 },
                 scroll: document.body.scrollTop
             }

@@ -5,24 +5,34 @@ import FlatButton from 'material-ui/FlatButton'
 import Instruction from './Instruction'
 import ActionNoteAdd from 'material-ui/svg-icons/action/note-add'
 
-import { creationDialog, editDialog, deleteDialog, changeOrder, expand } from './actions'
+import { creationDialog, editDialog, deleteDialog, changeOrder, expand,
+    startMove, endMove } from './actions'
 
-const Program = ({ user, owner, program, newIndex, instructions,
-    newIns, editIns, deleteIns, moveIns, expand
+const Program = ({ user, moving,saving, expanding, prevOrder, owner, program, order, newIndex, instructions,
+    newIns, editIns, deleteIns, moveIns, expand,
+    startMove, endMove, finishMove, cancelMove
 }) => {
+    console.log(endMove)
     const insList = instructions.map( (i, idx) =>
         <Instruction key={idx}
             index={idx+1}
             instruction={i}
             deleteIns={deleteIns(idx, i)}
             editIns={editIns(idx, i)}
+            startMove={startMove(idx, order)}
+            finishMove={endMove(idx, order, true)}
+            cancelMove={endMove(idx, prevOrder, false)}
+            isMoving={moving === idx}
+            isSaving={saving}
             moveUp={moveIns(program, idx, true)}
             moveDown={moveIns(program, idx, false)}
-            expand={expand(program, i)}
+            expanded={expanding[idx]}
+            expand={moving? ((e) => {}):expand(program, idx)}
             isEditor={owner === user} />
     )
     if (owner === user) insList.push(
         <FlatButton key="new" label="new"
+            style={{color: "#466BB0"}}
             fullWidth={true}
             icon={<ActionNoteAdd />}
             onClick={newIns(newIndex)}/>
@@ -38,21 +48,26 @@ export default connect(
         const program = programs[user.viewing]
         return {
             user: user.profile.team,
+            moving: user.moving,
+            saving: user.saving,
+            expanding: user.expanding,
+            prevOrder: user.prevOrder,
             owner: program.team,
             program: program.id,
+            order: program.instructionOrder,
             newIndex: program.instructionOrder.length,
             instructions: program.instructionOrder.map(
                 id => program.instructions[id]
             )
         }
     },
-    dispatch => {
-        return {
+    dispatch => ({
+            startMove: (p, idx) => (e) => dispatch(startMove(p, idx)),
+            endMove: (idx, o, finish) => (e) => dispatch(endMove(idx, o, finish)),
             newIns: (idx) => (e) => dispatch(creationDialog(idx)),
             editIns: (idx, i) => (e) => dispatch(editDialog(idx, i)),
             deleteIns: (idx, i) => (e) => dispatch(deleteDialog(idx ,i)),
             moveIns: (p, idx, up) => (e) => dispatch(changeOrder(p, idx, up)),
-            expand: (p, ins) => (willExpand) => { dispatch(expand(p, ins, willExpand)) }
-        }
-    }
+            expand: (p, idx) => (willExpand) => { dispatch(expand(p, idx, willExpand)) }
+        })
 )(Program)

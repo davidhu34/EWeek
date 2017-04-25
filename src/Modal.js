@@ -35,9 +35,11 @@ const Modal = ({ modal, program, instruction, saving,
             icon: <ActionNoteAdd />
         }
     }
+    console.log(dialogAction)
     const actionButtons = saving? <CircularProgress color="#466BB0"/>
         : <CardActions>
             <RaisedButton {...actionProps[type]}
+                style={{color:"#466BB0"}}
                 onClick={dialogAction(type, program, instruction)} />
             <RaisedButton label="取消"
                 onClick={closeDialog} />
@@ -57,7 +59,7 @@ const Modal = ({ modal, program, instruction, saving,
                        html.clientHeight, html.scrollHeight, html.offsetHeight )
     return open? <div
         style={{
-            zIndex: 2,
+            zIndex: 3,
             width: '100%',
             height: maxH,
             position: 'absolute',

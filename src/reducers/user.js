@@ -1,3 +1,5 @@
+import md5 from 'md5'
+
 const initUser = {
 	profile: null,
 	login: {
@@ -72,9 +74,15 @@ export const user = (state=initUser, action) => {
 					return idx === pos
 				})
 			}
+		case 'INS_CREATE':
+			return {
+				...state,
+				expanding: [...state.expanding, true]
+			}
 		case 'INS_START_MOVE':
 			return {
 				...state,
+				prevOrder: action.order,
 				moving: action.index,
 				expanding: state.expanding.map( (e, idx) => {
 					return idx === action.index

@@ -1,13 +1,15 @@
 import io from 'socket.io-client'
 
-const socket = io('https://eweek2017.mybluemix.net')
-//const socket = io('localhost:3000')
+//const socket = io('https://eweek2017.mybluemix.net')
+const socket = io('localhost:3000')
 const socketLogin = login => {
     console.log('emit LOGIN')
+    const date = new Date()
     socket.emit('LOGIN', {
         Class: login.Class,
         team: login.team,
-        password: login.password
+        password: login.password,
+        date: date.getTime()
     })
 }
 const emitChanges = p => {

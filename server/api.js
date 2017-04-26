@@ -7,17 +7,46 @@ const successLog = ( data ) => {
 }
 const classes = [
     'kyber',
-    'bespin',
-    'whills',
-    'yavin4',
+    'hoth',
     'cantina',
     'yubnub',
+    'atast',
+    'wampa',
+    'ranchor',
+    'sheev',
     'atat',
-    'dagobah',
-    'kenobi',
-    'bbunit'
+    'bespin'
 ]
+const passwords = {
+    A: 'ahchto',
+    B: 'bespin',
+    C: 'crait',
+    D: 'dagobah',
+    E: 'endor'
+}
+const checkPassword = (p, t, d) => {    
+    const day = d.getDate()
+    const month = d.getMonth()+1
+    const code = String(day+month)+String(day*month)
+    console.log(day, month, code)
+    return p.indexOf(passwords[t]) > -1
+        && p.indexOf(code) > -1
+}
 let users = {}
+let dateProgram = {}
+for(let mm=3; mm<6; mm++){    
+    for (let dd=0; dd < 31; dd++){
+        const day = String(mm+1)+String(dd+1)
+        dateProgram[day] = {}
+        classes.map( c => {
+            dateProgram[day][c] = {}
+        })
+}}
+dateProgram['test'] = {}
+classes.map( c => {
+    dateProgram['test'][c] = {}
+})
+
 let classProgram = {}
 classes.map( c => {
     classProgram[c] = {}
@@ -33,10 +62,16 @@ module.exports = ( io, models ) => {
             console.log('server init data error', err)
         } else {
             programs.map( p => {
-                console.log(p)
                 console.log('program:',p.id)
                 const pData = JSON.parse(p.data)
-                classProgram[pData.Class][pData.team] = p
+                if(p.day){
+                    //console.log(p)
+                    console.log('hasday')
+                    dateProgram[p.day][pData.Class][pData.team] = p
+                }else{
+                    console.log('noday')
+                    dateProgram['test'][pData.Class][pData.team] = p
+                }
             })
             console.log('all data:')
         }
@@ -45,16 +80,19 @@ module.exports = ( io, models ) => {
         console.log(socket.id)
         socket.on( 'LOGIN', login => {
             console.log('data req', login)
-            const {Class, team, password} = login
+            const {Class, team, password, date} = login
+            const time = new Date(date)
             const validClass = classes.indexOf(Class) > -1
-            const validPassword = password === Class+team
-            const id = password
+            const validPassword = checkPassword(password, team, time)
+            const day = String(time.getMonth()+1)+String(time.getDate())
+            const id = Class+team+day
             console.log(validClass, validPassword)
             if (validClass && validPassword) {
                 const profile = {
                     id: id,
                     team: team,
-                    Class: Class
+                    Class: Class,
+                    day: day
                 }
                 users[socket.id] = profile
                 //users[socket.id].socket = socket
@@ -62,7 +100,7 @@ module.exports = ( io, models ) => {
                 socket.emit('LOGIN_SUCCESS', {
                     profile: profile
                 })
-                const pCache = classProgram[profile.Class][profile.team]
+                const pCache = dateProgram[day][profile.Class][profile.team]
                 if (!pCache) {
                     console.log('new data for:', id)
                     const init = JSON.stringify({
@@ -74,6 +112,7 @@ module.exports = ( io, models ) => {
                     })
                     Program.create({
                         id: id,
+                        day: day,
                         data: init
                     }, (err, p) => {
                         console.log('created for '+id)
@@ -81,10 +120,10 @@ module.exports = ( io, models ) => {
                     })
                 } else socket.emit( 'PROGRAM_DATA', pCache)
                 console.log('sending p data')
-                Object.keys(classProgram[Class]).map( k => {
+                Object.keys(dateProgram[day][Class]).map( k => {
                     console.log('class program key', k)
                     socket.emit('PROGRAM_DATA',
-                        classProgram[Class][k].data
+                        dateProgram[day][Class][k].data
                     )
                 })
             } else {
@@ -100,7 +139,7 @@ module.exports = ( io, models ) => {
                 id: u.id,
                 data: JSON.stringify(program)
             }
-            classProgram[u.Class][u.team] = newSave
+            dateProgram[u.day][u.Class][u.team] = newSave
             console.log('u', u, 'p', program)
             Program.update( {id: u.id},
                 newSave,
@@ -124,6 +163,7 @@ module.exports = ( io, models ) => {
     }
 
     io.on('connection', socket => {
+        console.log('connected:', socket.id)
         user(socket)
     })
     return router

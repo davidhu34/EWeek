@@ -12,7 +12,6 @@ const Program = ({ user, moving,saving, expanding, prevOrder, owner, program, or
     newIns, editIns, deleteIns, moveIns, expand,
     startMove, endMove, finishMove, cancelMove
 }) => {
-    console.log(endMove)
     const insList = instructions.map( (i, idx) =>
         <Instruction key={idx}
             index={idx+1}

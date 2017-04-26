@@ -19,7 +19,6 @@ const Instruction = ({ index, instruction, isEditor, isMoving, isSaving,
     editIns, deleteIns, expanded, expand, startMove,
     moveUp, moveDown, finishMove, cancelMove
 }) => {
-    console.log(finishMove, cancelMove)
     const { name, type, content, repeat, then, link } = instruction
     const actionButtons = isEditor? isMoving? isSaving? 
         <CircularProgress color="#466BB0"/>: <CardActions expandable={true}>

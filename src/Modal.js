@@ -35,7 +35,6 @@ const Modal = ({ modal, program, instruction, saving,
             icon: <ActionNoteAdd />
         }
     }
-    console.log(dialogAction)
     const actionButtons = saving? <CircularProgress color="#466BB0"/>
         : <CardActions>
             <RaisedButton {...actionProps[type]}

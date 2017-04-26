@@ -14,6 +14,8 @@ const classes = [
     'wampa',
     'ranchor',
     'sheev',
+    'whills',
+    'bendu',
     'atat',
     'bespin'
 ]

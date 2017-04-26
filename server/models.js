@@ -3,6 +3,7 @@ module.exports = ( mongoose ) => {
 
     mongoose.model( 'Program', new Schema({
         id: String,
+        day: String,
         data: String,
     }))
     return {

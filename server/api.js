@@ -26,7 +26,7 @@ const passwords = {
     D: 'dagobah',
     E: 'endor'
 }
-const checkPassword = (p, t, d) => {    
+const checkPassword = (p, t, d) => {
     const day = d.getDate()
     const month = d.getMonth()+1
     const code = String(day+month)+String(day*month)
@@ -36,7 +36,7 @@ const checkPassword = (p, t, d) => {
 }
 let users = {}
 let dateProgram = {}
-for(let mm=3; mm<6; mm++){    
+for(let mm=3; mm<6; mm++){
     for (let dd=0; dd < 31; dd++){
         const day = String(mm+1)+String(dd+1)
         dateProgram[day] = {}
@@ -64,22 +64,19 @@ module.exports = ( io, models ) => {
             console.log('server init data error', err)
         } else {
             programs.map( p => {
-                console.log('program:',p.id)
                 const pData = JSON.parse(p.data)
                 if(p.day){
-                    //console.log(p)
-                    console.log('hasday')
+                    console.log('program:',p.id,'hasday')
                     dateProgram[p.day][pData.Class][pData.team] = p
                 }else{
-                    console.log('noday')
+                    console.log('program:',p.id,'noday')
                     dateProgram['test'][pData.Class][pData.team] = p
                 }
             })
-            console.log('all data:')
+            console.log('all data got')
         }
     })
     const user = socket => {
-        console.log(socket.id)
         socket.on( 'LOGIN', login => {
             console.log('data req', login)
             const {Class, team, password, date} = login
@@ -88,7 +85,7 @@ module.exports = ( io, models ) => {
             const validPassword = checkPassword(password, team, time)
             const day = String(time.getMonth()+1)+String(time.getDate())
             const id = Class+team+day
-            console.log(validClass, validPassword)
+            console.log('valid class',validClass,'valid pwd',validPassword)
             if (validClass && validPassword) {
                 const profile = {
                     id: id,
@@ -121,9 +118,9 @@ module.exports = ( io, models ) => {
                         socket.emit( 'PROGRAM_DATA', init)
                     })
                 } else socket.emit( 'PROGRAM_DATA', pCache)
-                console.log('sending p data')
+                console.log('sending p data to', id)
                 Object.keys(dateProgram[day][Class]).map( k => {
-                    console.log('class program key', k)
+                    console.log('class ', k, 'to', id)
                     socket.emit('PROGRAM_DATA',
                         dateProgram[day][Class][k].data
                     )
@@ -136,13 +133,19 @@ module.exports = ( io, models ) => {
             }
         })
         socket.on('SAVE_CHANGES', program => {
+            if(!users[socket.id])
+                users[socket.id] = {
+                    id: program.id,
+                    team: program.team,
+                    Class: program.Class,
+                    day: program.day
+                }
             const u = users[socket.id]
             const newSave = {
                 id: u.id,
                 data: JSON.stringify(program)
             }
             dateProgram[u.day][u.Class][u.team] = newSave
-            console.log('u', u, 'p', program)
             Program.update( {id: u.id},
                 newSave,
                 (err, n, res) => {

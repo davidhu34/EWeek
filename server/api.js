@@ -5,26 +5,13 @@ const { Router } = require('express')
 const successLog = ( data ) => {
     console.log( 'on query success:\n', data )
 }
-const classes = [
-    'kyber',
-    'hoth',
-    'cantina',
-    'yubnub',
-    'atast',
-    'wampa',
-    'ranchor',
-    'sheev',
-    'whills',
-    'bendu',
-    'atat',
-    'bespin'
-]
+const classes = ['MIN', 'SEA', 'NYY', 'CHC', 'TEX', 'LAD', 'BOS', 'CLE', 'PIT', 'STL', 'ATAT', 'BESPIN', 'hoth', 'kyber', 'bendu']
 const passwords = {
-    A: 'ahchto',
-    B: 'bespin',
-    C: 'crait',
-    D: 'dagobah',
-    E: 'endor'
+    A: 'Apple',
+    B: 'Banana',
+    C: 'Cookie',
+    D: 'Drink',
+    E: 'Egg'
 }
 const checkPassword = (p, t, d) => {
     const day = d.getDate()
@@ -41,7 +28,7 @@ for(let mm=3; mm<6; mm++){
         const day = String(mm+1)+String(dd+1)
         dateProgram[day] = {}
         classes.map( c => {
-            dateProgram[day][c] = {}
+            dateProgram[day][c.toUpperCase()] = {}
         })
 }}
 dateProgram['test'] = {}
@@ -67,10 +54,10 @@ module.exports = ( io, models ) => {
                 const pData = JSON.parse(p.data)
                 if(p.day){
                     console.log('program:',p.id,'hasday')
-                    dateProgram[p.day][pData.Class][pData.team] = p
+                    dateProgram[p.day][pData.Class.toUpperCase()][pData.team] = p
                 }else{
                     console.log('program:',p.id,'noday')
-                    dateProgram['test'][pData.Class][pData.team] = p
+                    dateProgram['test'][pData.Class.toUpperCase()][pData.team] = p
                 }
             })
             console.log('all data got')
@@ -79,7 +66,8 @@ module.exports = ( io, models ) => {
     const user = socket => {
         socket.on( 'LOGIN', login => {
             console.log('data req', login)
-            const {Class, team, password, date} = login
+            const {team, password, date} = login
+            const Class = login.Class.toUpperCase()
             const time = new Date(date)
             const validClass = classes.indexOf(Class) > -1
             const validPassword = checkPassword(password, team, time)
@@ -106,6 +94,7 @@ module.exports = ( io, models ) => {
                         id: id,
                         team: team,
                         Class: Class,
+                        day: day,
                         instructionOrder: [],
                         instructions: {}
                     })
@@ -137,7 +126,7 @@ module.exports = ( io, models ) => {
                 users[socket.id] = {
                     id: program.id,
                     team: program.team,
-                    Class: program.Class,
+                    Class: program.Class.toUpperCase(),
                     day: program.day
                 }
             const u = users[socket.id]

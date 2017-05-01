@@ -43,15 +43,16 @@ const Instruction = ({ index, instruction, isEditor, isMoving, isSaving,
         <FlatButton label="刪除" style={{color: "#466BB0"}}
             icon={<ActionDelete/>}
             onClick={deleteIns}/>
-        <FlatButton label="移動順序" style={{color: "#466BB0"}}
+        <FlatButton label="移動" style={{color: "#466BB0"}}
             icon={<ActionSwapVert/>}
             onClick={startMove}/>
     </CardActions> : null
 
     const insStr = expanded? name
-        : name.slice(0, 13)+'...'
+        : name.slice(0, 10)+'...'
     return <Card expanded={expanded} onExpandChange={expand}>
-        <CardHeader
+        <CardHeader textStyle={{padding:0}}
+        titleStyle={{ paddingRight:30,fontSize: 18, fontFamily:'Microsoft YaHei'}}
             title={String(index)+'. '+insStr}
             actAsExpander={true}
             showExpandableButton={true}

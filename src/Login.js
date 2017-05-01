@@ -6,22 +6,19 @@ import TextField from 'material-ui/TextField'
 import { Tabs, Tab } from 'material-ui/Tabs'
 
 import { updateLogin, submitLogin } from './actions'
-import { textFieldColors } from './styles'
+import { textFieldStyle } from './styles'
 const Login = ({ login, updateLogin, submitLogin }) => {
-    return <div>
-        <TextField {...textFieldColors}
+        return <div style={{padding:30}}>
+        <TextField {...textFieldStyle}
             floatingLabelText="班級"
-            fullWidth={true}
             onChange={updateLogin('Class')}
         />
-        <TextField {...textFieldColors}
-            floatingLabelText="隊伍"
-            fullWidth={true}
+        <TextField {...textFieldStyle}
+            floatingLabelText="組別"
             onChange={updateLogin('team')}
         />
-        <TextField {...textFieldColors}
+        <TextField {...textFieldStyle}
             floatingLabelText="密碼"
-            fullWidth={true}
             onChange={updateLogin('password')}
         />
         <FlatButton label="登入"

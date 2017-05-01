@@ -7,6 +7,7 @@ import TextField from 'material-ui/TextField'
 import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card'
+import Paper from 'material-ui/Paper'
 import CircularProgress from 'material-ui/CircularProgress'
 
 import ContentSave from 'material-ui/svg-icons/content/save'
@@ -14,7 +15,7 @@ import ActionDelete from 'material-ui/svg-icons/action/delete'
 import ActionNoteAdd from 'material-ui/svg-icons/action/note-add'
 
 import { dialogAction, closeDialog, updateTemp } from './actions'
-import { textFieldColors } from './styles'
+import { textFieldStyle } from './styles'
 
 const Modal = ({ modal, program, instruction, saving,
     dialogAction, closeDialog, updateTemp
@@ -47,8 +48,9 @@ const Modal = ({ modal, program, instruction, saving,
         <TextField
             floatingLabelText="指令"
             fullWidth={true}
+            multiLine={true}
             defaultValue={instruction.name}
-            {...textFieldColors}
+            {...textFieldStyle}
             onChange={updateTemp('name')}
         />
     </span> : null
@@ -64,14 +66,19 @@ const Modal = ({ modal, program, instruction, saving,
             position: 'absolute',
             top: 0,
             left: 0,
-            backgroundColor: 'rgba(255,255,255,0.95)',
-            //WebkitTextFillColor: 'transparent',
-            //WebkitBackgroundClip: 'text'
+            backgroundColor: 'rgba(0,0,0,0.8)'
         }}>
-    <div style={{ position: 'absolute',top: scroll}}>
-
+    <div style={{
+        width: '100%',
+        position: 'absolute',
+        top: scroll,
+    }}>
+        <Paper style={{ width: '80%',margin:'auto', marginTop: 30}}>
             <b>
             <CardHeader
+                style={{ width: '100%', padding:10}}
+                titleStyle={{fontSize:20, fontWeight:700}}
+                subtitleStyle={{width:'100%'}}
                 title={title}
                 subtitle={note}
             />
@@ -80,7 +87,7 @@ const Modal = ({ modal, program, instruction, saving,
                 {editor}
             </CardText>
             {actionButtons}
-
+        </Paper>
     </div></div>:null
 }
 

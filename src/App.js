@@ -43,7 +43,7 @@ const App = ({ user, reselectTeam, saveChanges }) => {
         </div>: <TeamList />
     ): <Login />
     return <div>
-        <AppBar title="DiscoverE game"
+        <AppBar title="2017 DiscoverE"
             showMenuIconButton={false}
             style={{
                 backgroundColor: "#466BB0",

@@ -46,7 +46,7 @@ const api = (dispatch) => {
     socket.on( 'PROGRAM_DATA', data => {
         dispatch({
             type: 'FETCH_PROGRAM',
-            program: JSON.parse(data)
+            program: data
         })
     })
     socket.on( 'SAVE_SUCCESS', data => {

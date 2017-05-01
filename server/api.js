@@ -90,28 +90,28 @@ module.exports = ( io, models ) => {
                 const pCache = dateProgram[day][profile.Class][profile.team]
                 if (!pCache) {
                     console.log('new data for:', id)
-                    const init = JSON.stringify({
+                    const init = {
                         id: id,
                         team: team,
                         Class: Class,
                         day: day,
                         instructionOrder: [],
                         instructions: {}
-                    })
+                    }
                     Program.create({
                         id: id,
                         day: day,
-                        data: init
+                        data: JSON.stringify(init)
                     }, (err, p) => {
                         console.log('created for '+id)
                         socket.emit( 'PROGRAM_DATA', init)
                     })
-                } else socket.emit( 'PROGRAM_DATA', pCache)
+                } else socket.emit( 'PROGRAM_DATA', JSON.parse(pCache.data))
                 console.log('sending p data to', id)
                 Object.keys(dateProgram[day][Class]).map( k => {
                     console.log('class ', k, 'to', id)
                     socket.emit('PROGRAM_DATA',
-                        dateProgram[day][Class][k].data
+                        JSON.parse(dateProgram[day][Class][k].data)
                     )
                 })
             } else {
@@ -142,7 +142,14 @@ module.exports = ( io, models ) => {
                     if (err) console.log('save fail')
                     else {
                         socket.emit('SAVE_SUCCESS', program)
-                        socket.broadcast.emit('PROGRAM_DATA', newSave.data)
+                        //socket.broadcast.emit('PROGRAM_DATA', newSave.data)
+                        Object.keys(users).map( id => {
+                            console.log(users[id], program.day, program.Class)
+                            if (users[id].day === program.day
+                                && users[id].Class === program.Class) {
+                                io.sockets.connected[id].emit('PROGRAM_DATA', program)
+                            }
+                        })
                         //Object.keys(users).map( id => {
                         //    io.sockets.socket(id).emit('PROGRAM_DATA', newSave.data)
                         //})

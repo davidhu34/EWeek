@@ -1,6 +1,6 @@
 import io from 'socket.io-client'
 
-const socket = io('https://eweek2017.mybluemix.net')
+const socket = io('https://discovere2017.mybluemix.net')
 //const socket = io('localhost:3000')
 const socketLogin = login => {
     console.log('emit LOGIN')

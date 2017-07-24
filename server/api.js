@@ -23,7 +23,7 @@ const checkPassword = (p, t, d) => {
 }
 let users = {}
 let dateProgram = {}
-for(let mm=3; mm<6; mm++){
+for(let mm=0; mm<12; mm++){
     for (let dd=0; dd < 31; dd++){
         const day = String(mm+1)+String(dd+1)
         dateProgram[day] = {}
